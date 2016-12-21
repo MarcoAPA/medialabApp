@@ -59,5 +59,15 @@ export class Database {
             });
         });
     }
+
+    public deletePerson() {
+        return new Promise((resolve, reject) => {
+            this.storage.executeSql("DELETE FROM people ORDER BY id DESC LIMIT 1", []).then((data) => {
+                resolve(data);
+            }, (error) => {
+                reject(error);
+            });
+        });
+    }
  
 }

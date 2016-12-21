@@ -48,5 +48,12 @@ export class Page1 {
             console.log("ERROR: ", error);
         });
     }
+    public delete(){
+    	this.database.deletePerson().then((result) => {
+            this.load();
+        }, (error) => {
+            console.log("ERROR: ", error);
+        });
+    }
 
 }

@@ -9,10 +9,14 @@
 
 <ion-content padding>
   <h3>Próximos eventos</h3>
-  
-  <button (click)="create('Marco', 'Palacios')">
-    <ion-icon name="add"></ion-icon>
-  </button>
+  <ion-buttons end>
+    <button (click)="create('Marco', 'Palacios')">
+      <ion-icon name="ion-plus-circled"></ion-icon>
+    </button>
+    <button (click)="delete()">
+      <ion-icon name="ion-minus-circled"></ion-icon>
+    </button>
+  </ion-buttons>
 
   <ion-list>
     <ion-item *ngFor="let person of itemList">

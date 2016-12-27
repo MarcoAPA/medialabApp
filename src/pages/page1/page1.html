@@ -4,16 +4,22 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>MediaLab-Prado</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear>
+        <ion-icon name='search'></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <h3>Próximos eventos</h3>
-  <ion-buttons end>
-    <button (click)="create('Marco', 'Palacios')">
+  
+  <ion-buttons start>
+    <button ion-button (click)="create('Marco', 'Palacios')">
       <ion-icon name="add"></ion-icon>
     </button>
-    <button (click)="delete()">
+    <button ion-button (click)="delete()">
       <ion-icon name="remove"></ion-icon>
     </button>
   </ion-buttons>

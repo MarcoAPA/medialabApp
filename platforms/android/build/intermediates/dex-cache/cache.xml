@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\libs\sqlite-connector.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="76169ab23a4f939925491c6fe186749da5a56ee9">
+        <dex dex="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\build\intermediates\pre-dexed\debug\sqlite-connector_6c8b4fa7e41a84c6c5a13fe03b1ee60327659eea.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="79d68b70e2f02123c5a1205261f8c9cc038870de">
+        <dex dex="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_fe952101232a6b41ccc87e2e1faecb72c666ad38.jar" />
+    </item>
+
+</items>

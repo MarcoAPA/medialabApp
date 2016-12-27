@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import {SQLite} from 'ionic-native';
+import { SQLite } from 'ionic-native';
 import 'rxjs/add/operator/map';
 
 /*

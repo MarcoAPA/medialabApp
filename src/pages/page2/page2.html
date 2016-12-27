@@ -13,7 +13,20 @@
     This text will change
   </div> -->
 
-  <ion-buttons start id="mode">
+  <ion-segment>
+    <!-- Es obligatorio incluir el value para que funcionen las pestañas activas -->
+    <ion-segment-button id="walkB" value="walkB"> 
+      <ion-icon name="walk"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button id="transitB" value="transitB">
+      <ion-icon name="bus"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button id="drivingB" value="drivingB">
+      <ion-icon name="car"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- <ion-buttons start id="mode">
     <button ion-button icon-only large id="walkB">
       <ion-icon name="walk"></ion-icon>
     </button>
@@ -23,7 +36,7 @@
     <button ion-button icon-only large id="drivingB">
       <ion-icon name="car"></ion-icon>
     </button>
-  </ion-buttons>
+  </ion-buttons> -->
 
   <!-- <div id="floating-panel">
     <b>Mode of Travel: </b>

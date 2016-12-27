@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import {Database} from "../../providers/database"; 
+import { Database } from "../../providers/database"; 
 
 @Component({
   selector: 'page-page1',
@@ -23,9 +23,9 @@ import {Database} from "../../providers/database";
 
 export class Page1 {
 
-    public itemList: Array<Object>;
+    private itemList: Array<Object>;
  
-    public constructor(private navController: NavController, public database:Database) {
+    public constructor(private navController: NavController, public database: Database) {
         this.itemList = [];
     }
  
@@ -34,22 +34,22 @@ export class Page1 {
     }
  
     public load() {
-        this.database.getPeople().then((result) => {
+        this.database.getAll().then((result) => {
             this.itemList = <Array<Object>> result;
         }, (error) => {
             console.log("ERROR: ", error);
         });
     }
  
-    public create(firstname: string, lastname: string) {
-        this.database.createPerson(firstname, lastname).then((result) => {
+    public createEvent(firstname: string, lastname: string) {
+        this.database.insert(firstname, lastname).then((result) => {
             this.load();
         }, (error) => {
             console.log("ERROR: ", error);
         });
     }
-    public delete(){
-    	this.database.deletePerson().then((result) => {
+    public deleteEvent(){
+    	this.database.delete().then((result) => {
             this.load();
         }, (error) => {
             console.log("ERROR: ", error);

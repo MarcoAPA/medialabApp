@@ -24,15 +24,15 @@ export class Database {
         if(!this.isOpen) {
             this.storage = new SQLite();
             this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
-                this.storage.executeSql("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []);
+                this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []);
                 this.isOpen = true;
             });
         }
     }
  
-    public getPeople() {
+    public getAll() {
         return new Promise((resolve, reject) => {
-            this.storage.executeSql("SELECT * FROM people", []).then((data) => {
+            this.storage.executeSql("SELECT * FROM events", []).then((data) => {
                 let people = [];
                 if(data.rows.length > 0) {
                     for(let i = 0; i < data.rows.length; i++) {
@@ -50,9 +50,9 @@ export class Database {
         });
     }
  
-    public createPerson(firstname: string, lastname: string) {
+    public insert(firstname: string, lastname: string) {
         return new Promise((resolve, reject) => {
-            this.storage.executeSql("INSERT INTO people (firstname, lastname) VALUES (?, ?)", [firstname, lastname]).then((data) => {
+            this.storage.executeSql("INSERT INTO events (firstname, lastname) VALUES (?, ?)", [firstname, lastname]).then((data) => {
                 resolve(data);
             }, (error) => {
                 reject(error);
@@ -60,9 +60,9 @@ export class Database {
         });
     }
 
-    public deletePerson() {
+    public delete() {
         return new Promise((resolve, reject) => {
-            this.storage.executeSql("DELETE FROM people", []).then((data) => {
+            this.storage.executeSql("DELETE FROM events", []).then((data) => {
                 resolve(data);
             }, (error) => {
                 reject(error);

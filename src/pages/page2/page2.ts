@@ -19,23 +19,18 @@ export class Page2 {
   
   @ViewChild('map') mapElement: ElementRef; /* Añadimos la referencia al elemento mapa que añadiremos luego a nuestro html con #map */
 
-  map: any;
-  mapInitialised: boolean = false;
-  apiKey: 'AIzaSyBlrDUzc42lKRhjbVc_zD0sM1sJgyLEqjE'; /* API key de Google Maps*/
-  origin: {lat: 40.4542158, lng:-3.7212351};
+  private map: any;
+  private mapInitialised: boolean = false;
+  private apiKey: 'AIzaSyBlrDUzc42lKRhjbVc_zD0sM1sJgyLEqjE'; /* API key de Google Maps*/
+  //private origin: {lat: 40.4542158, lng:-3.7212351};
   //destination: {lat: 40.410560776119, lng: -3.6937931079230700};  
   //destination: 'Calle de la Alameda, 15, 28014 Madrid, Spain';
 
-  constructor(public navCtrl: NavController, public connectivityService: ConnectivityService) {
+  public constructor(public navCtrl: NavController, public connectivityService: ConnectivityService) {
     this.loadGoogleMaps();
-    //let lat = '40.4105';
-    //let lng = '-3.6937';
-    //let myLatLng = {lat: 40.410560776119, lng: -3.6937931079230700};
-    //destination = new google.maps.LatLng({lat: 40.410560776119, lng: -3.6937931079230700});
-    //destination = new google.maps.LatLng('40.410560776119', '-3.6937931079230700');
   }
 
-  loadGoogleMaps(){
+  public loadGoogleMaps(){
  
     this.addConnectivityListeners();
  
@@ -82,7 +77,7 @@ export class Page2 {
    
   }
  
-  initMap(){
+  public initMap(){
  
     this.mapInitialised = true;
      
@@ -170,26 +165,26 @@ export class Page2 {
       /*
       Función para que se mueva el marker
        */
-      function toggleBounce(marker) {
+      /*function toggleBounce(marker) {
         if (marker.getAnimation() !== null) {
           marker.setAnimation(null);
         } else {
           marker.setAnimation(google.maps.Animation.BOUNCE);
         }
-      }
+      }*/
 
     });
   }
  
-  disableMap(){
+  public disableMap(){
     console.log("disable map");
   }
  
-  enableMap(){
+  public enableMap(){
     console.log("enable map");
   }
  
-  addConnectivityListeners(){
+  public addConnectivityListeners(){
  
     let onOnline = () => {
  

@@ -37,14 +37,16 @@ export class Page1 {
         this.database.getAll().then((result) => {
             this.itemList = <Array<Object>> result;
         }, (error) => {
+        	alert("ERROR load");
             console.log("ERROR: ", error);
         });
     }
  
-    public createEvent(firstname: string, lastname: string) {
-        this.database.insert(firstname, lastname).then((result) => {
+    public createEvent(title: string, description: string, url: string, place: string) {
+        this.database.insert(title, description, url, place).then((result) => {
             this.load();
         }, (error) => {
+        	alert("ERROR createEvent");
             console.log("ERROR: ", error);
         });
     }
@@ -52,6 +54,7 @@ export class Page1 {
     	this.database.delete().then((result) => {
             this.load();
         }, (error) => {
+        	alert("ERROR deleteEvent");
             console.log("ERROR: ", error);
         });
     }

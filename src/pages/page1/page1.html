@@ -16,7 +16,7 @@
   <h3>Próximos eventos</h3>
   
   <ion-buttons start>
-    <button ion-button (click)="createEvent('Marco', 'Palacios')">
+    <button ion-button (click)="createEvent('Titulo del evento', 'Descripcion del evento', 'url del ev', 'lugar del ev')">
       <ion-icon name="add"></ion-icon>
     </button>
     <button ion-button (click)="deleteEvent()">
@@ -27,10 +27,10 @@
   <ion-list>
     <ion-card *ngFor="let event of itemList">
         <ion-card-header>
-          {{event.firstname}}
+          {{event.title}}
         </ion-card-header>
         <ion-card-content>
-          {{event.lastname}}
+          {{event.description}} 
         </ion-card-content>  
     </ion-card>
   </ion-list>  

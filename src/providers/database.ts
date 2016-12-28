@@ -24,8 +24,15 @@ export class Database {
         if(!this.isOpen) {
             this.storage = new SQLite();
             this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
-                this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []);
-                this.isOpen = true;
+              this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, url TEXT, place TEXT)", {}).then(() => {
+              }, (err) => {
+                console.error('Unable to execute sql: ', err);
+                alert('Unable to execute sql: '+ err);
+              });
+              this.isOpen = true;
+            }, (err) => {
+              console.error('Unable to open database: ', err);
+              alert('Unable to open database: '+ err);
             });
         }
     }
@@ -33,31 +40,43 @@ export class Database {
     public getAll() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("SELECT * FROM events", []).then((data) => {
-                let people = [];
+                let events = [];
                 if(data.rows.length > 0) {
                     for(let i = 0; i < data.rows.length; i++) {
-                        people.push({
+                        events.push({
                             id: data.rows.item(i).id,
-                            firstname: data.rows.item(i).firstname,
-                            lastname: data.rows.item(i).lastname
+                            title: data.rows.item(i).title,
+                            description: data.rows.item(i).description,
+                            url: data.rows.item(i).url,
+                            place: data.rows.item(i).place
+                            //fecha: data.rows.item(i).fecha
                         });
                     }
                 }
-                resolve(people);
+                resolve(events);
             }, (error) => {
+                alert("ERROR GETALL");
                 reject(error);
             });
         });
     }
  
-    public insert(firstname: string, lastname: string) {
+    public insert(title: string, description: string, url: string, place: string) {
         return new Promise((resolve, reject) => {
-            this.storage.executeSql("INSERT INTO events (firstname, lastname) VALUES (?, ?)", [firstname, lastname]).then((data) => {
+            this.storage.executeSql("INSERT INTO events (title, description, url, place) VALUES (?, ?, ?, ?)", ["Pepe1", "Pepe Gaylor", "a1", "a2"]).then((data) => {
                 resolve(data);
             }, (error) => {
+                alert("ERROR INSERT1 " + error);
                 reject(error);
             });
+            /*this.storage.executeSql("INSERT INTO events (title, description, url, place) VALUES (?, ?, ?, ?)", [title, description, url, place]).then((data) => {
+                resolve(data);
+            }, (error) => {
+                alert("ERROR INSERT2");
+                reject(error);
+            });*/
         });
+
     }
 
     public delete() {
@@ -65,6 +84,7 @@ export class Database {
             this.storage.executeSql("DELETE FROM events", []).then((data) => {
                 resolve(data);
             }, (error) => {
+                alert("ERROR DELETE");
                 reject(error);
             });
         });

@@ -25,9 +25,11 @@ export class Page2 {
   //private origin: {lat: 40.4542158, lng:-3.7212351};
   //destination: {lat: 40.410560776119, lng: -3.6937931079230700};  
   //destination: 'Calle de la Alameda, 15, 28014 Madrid, Spain';
+  TransportMode: any = this;
 
   public constructor(public navCtrl: NavController, public connectivityService: ConnectivityService) {
     this.loadGoogleMaps();
+    this.TransportMode = "walkB"; //Para indicar la pestaña por defecto doy valor inicial al ngModel TransportMode
   }
 
   public loadGoogleMaps(){

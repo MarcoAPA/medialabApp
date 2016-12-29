@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
+
 import { Http } from '@angular/http';
+
 import { SQLite } from 'ionic-native';
+
 import 'rxjs/add/operator/map';
+
+import { ConnectivityService } from '../providers/connectivity-service';
 
 /*
   Generated class for the Database provider.
@@ -19,72 +24,82 @@ export class Database {
  
     private storage: SQLite;
     private isOpen: boolean;
- 
-    public constructor() {
+     
+    /*
+        This constructor method is called every time we inject this provider into a page, 
+        but our conditional logic prevents trying to open more than one instance of the database.
+     */
+    public constructor(public connectivityService: ConnectivityService) {
         if(!this.isOpen) {
-            this.storage = new SQLite();
-            this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
-              this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, url TEXT, place TEXT)", {}).then(() => {
-              }, (err) => {
-                console.error('Unable to execute sql: ', err);
-                alert('Unable to execute sql: '+ err);
-              });
-              this.isOpen = true;
-            }, (err) => {
-              console.error('Unable to open database: ', err);
-              alert('Unable to open database: '+ err);
-            });
+            /* Compruebo si estoy en un dispositivo o en un navegador */
+            if (connectivityService.onDevice){
+                alert('device');
+                this.storage = new SQLite();
+                this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
+                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []).then(() => {
+                  }, (err) => {
+                    console.error('Unable to execute sql: ', err);
+                    alert('Unable to execute sql: '+ err);
+                  });
+                  this.isOpen = true;
+                }, (err) => {
+                  console.error('Unable to open database: ', err);
+                  alert('Unable to open database: '+ err);
+                });
+            }else {
+                alert('chrome');
+                /*this.storage = new SQLite();
+                window.openDatabase({name: "data.db", location: "default"}).then(() => {
+                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []).then(() => {
+                  }, (err) => {
+                    console.error('Unable to execute sql: ', err);
+                    alert('Unable to execute sql: '+ err);
+                  });
+                  this.isOpen = true;
+                }, (err) => {
+                  console.error('Unable to open database: ', err);
+                  alert('Unable to open database: '+ err);
+                });*/
+            }
         }
     }
  
-    public getAll() {
+    public getPeople() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("SELECT * FROM events", []).then((data) => {
-                let events = [];
+                let people = [];
                 if(data.rows.length > 0) {
                     for(let i = 0; i < data.rows.length; i++) {
-                        events.push({
+                        people.push({
                             id: data.rows.item(i).id,
-                            title: data.rows.item(i).title,
-                            description: data.rows.item(i).description,
-                            url: data.rows.item(i).url,
-                            place: data.rows.item(i).place
-                            //fecha: data.rows.item(i).fecha
+                            firstname: data.rows.item(i).firstname,
+                            lastname: data.rows.item(i).lastname
                         });
                     }
                 }
-                resolve(events);
+                resolve(people);
             }, (error) => {
-                alert("ERROR GETALL");
                 reject(error);
             });
         });
     }
  
-    public insert(title: string, description: string, url: string, place: string) {
+    public createPerson(firstname: string, lastname: string) {
         return new Promise((resolve, reject) => {
-            this.storage.executeSql("INSERT INTO events (title, description, url, place) VALUES (?, ?, ?, ?)", ["Pepe1", "Pepe Gaylor", "a1", "a2"]).then((data) => {
+            this.storage.executeSql("INSERT INTO events (firstname, lastname) VALUES (?, ?)", [firstname, lastname]).then((data) => {
                 resolve(data);
             }, (error) => {
-                alert("ERROR INSERT1 " + error);
                 reject(error);
             });
-            /*this.storage.executeSql("INSERT INTO events (title, description, url, place) VALUES (?, ?, ?, ?)", [title, description, url, place]).then((data) => {
-                resolve(data);
-            }, (error) => {
-                alert("ERROR INSERT2");
-                reject(error);
-            });*/
         });
-
     }
 
-    public delete() {
+    public deleteEv() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("DELETE FROM events", []).then((data) => {
                 resolve(data);
             }, (error) => {
-                alert("ERROR DELETE");
+                alert("ERROR DELETE " + error);
                 reject(error);
             });
         });

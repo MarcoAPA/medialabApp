@@ -34,7 +34,7 @@ export class Page1 {
     }
  
     public load() {
-        this.database.getAll().then((result) => {
+        this.database.getPeople().then((result) => {
             this.itemList = <Array<Object>> result;
         }, (error) => {
         	alert("ERROR load");
@@ -42,16 +42,16 @@ export class Page1 {
         });
     }
  
-    public createEvent(title: string, description: string, url: string, place: string) {
-        this.database.insert(title, description, url, place).then((result) => {
+    public create(firstname: string, lastname: string) {
+        this.database.createPerson(firstname, lastname).then((result) => {
             this.load();
         }, (error) => {
-        	alert("ERROR createEvent");
             console.log("ERROR: ", error);
         });
     }
+
     public deleteEvent(){
-    	this.database.delete().then((result) => {
+    	this.database.deleteEv().then((result) => {
             this.load();
         }, (error) => {
         	alert("ERROR deleteEvent");

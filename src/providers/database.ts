@@ -19,6 +19,7 @@ import { ConnectivityService } from '../providers/connectivity-service';
   Finally we have two functions, a getPeople function and a createPerson function.  The function for retrieving data will return a promise.  
   The success response of the promise will be an array because we are transforming the SQLite results to an array of objects.  The function for creating data will take two strings and return a row id.
 */
+
 @Injectable()
 export class Database {
  
@@ -36,18 +37,31 @@ export class Database {
                 alert('device');
                 this.storage = new SQLite();
                 this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
-                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []).then(() => {
+                  this.isOpen = true;
+                  this.storage.executeSql("DROP TABLE events", []);
+                  this.storage.executeSql("CREATE TABLE events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, d DATE)", []).then((data) => {
+                      console.log("Table created: ", data);
+                      alert('Tabla creada: ' + JSON.stringify(data));
                   }, (err) => {
                     console.error('Unable to execute sql: ', err);
-                    alert('Unable to execute sql: '+ err);
+                    alert('Unable to execute sql: '+ JSON.stringify(err));
                   });
-                  this.isOpen = true;
                 }, (err) => {
                   console.error('Unable to open database: ', err);
                   alert('Unable to open database: '+ err);
                 });
             }else {
                 alert('chrome');
+
+                /*window.openDatabase = function(dbname, ignored1, ignored2, ignored3) {
+                  return window.sqlitePlugin.openDatabase({name: dbname, location: 'default'});
+                };*/
+                //var db = null;
+
+                /*document.addEventListener('deviceready', function() {
+                  db = window.SQlite.openDatabase({name: 'demo.db', location: 'default'});
+                });*/
+
                 /*this.storage = new SQLite();
                 window.openDatabase({name: "data.db", location: "default"}).then(() => {
                   this.storage.executeSql("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []).then(() => {
@@ -67,28 +81,35 @@ export class Database {
     public getPeople() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("SELECT * FROM events", []).then((data) => {
-                let people = [];
+                let events = [];
                 if(data.rows.length > 0) {
                     for(let i = 0; i < data.rows.length; i++) {
-                        people.push({
+                        events.push({
                             id: data.rows.item(i).id,
-                            firstname: data.rows.item(i).firstname,
-                            lastname: data.rows.item(i).lastname
+                            title: data.rows.item(i).title,
+                            description: data.rows.item(i).description,
+                            place: data.rows.item(i).place,
+                            pagurl: data.rows.item(i).pagurl,
+                            d: data.rows.item(i).d
                         });
                     }
                 }
-                resolve(people);
+                resolve(events);
             }, (error) => {
                 reject(error);
             });
         });
     }
  
-    public createPerson(firstname: string, lastname: string) {
+    public createPerson(title: string, description: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.storage.executeSql("INSERT INTO events (firstname, lastname) VALUES (?, ?)", [firstname, lastname]).then((data) => {
+            let place = 'lugar de pepe';
+            let pagurl = 'www.place.com';
+            let d = '2017-01-12';
+            this.storage.executeSql("INSERT INTO events (title, description, place, pagurl, d) VALUES (?, ?, ?, ?, ?)", [title, description, place, pagurl, d]).then((data) => {
                 resolve(data);
             }, (error) => {
+                alert('Fallo al insertar :' + JSON.stringify(error));
                 reject(error);
             });
         });
@@ -99,7 +120,7 @@ export class Database {
             this.storage.executeSql("DELETE FROM events", []).then((data) => {
                 resolve(data);
             }, (error) => {
-                alert("ERROR DELETE " + error);
+                alert("Fallo al borrar :" + JSON.stringify(error));
                 reject(error);
             });
         });

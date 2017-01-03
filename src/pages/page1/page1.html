@@ -25,12 +25,15 @@
   </ion-buttons>
 
   <ion-list>
-    <ion-card *ngFor="let person of itemList">
+    <ion-card *ngFor="let event of itemList">
         <ion-card-header>
-          {{person.firstname}}
+          {{event.title}}
         </ion-card-header>
         <ion-card-content>
-          {{person.lastname}} 
+          {{event.description}} 
+          {{event.place}}
+          {{event.pagurl}}
+          {{event.d}}
         </ion-card-content>  
     </ion-card>
   </ion-list>  

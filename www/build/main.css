@@ -22109,6 +22109,10 @@ sub {
   }
 }
 
+.activeHighlight {
+  background-color: #387ef5;
+}
+
 page-page2 .scroll-content {
   height: 100%;
 }

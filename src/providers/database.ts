@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { Http } from '@angular/http';
 
-import { SQLite } from 'ionic-native';
+/*
+Leer https://github.com/litehelpers/Cordova-sqlite-storage para mas información sobre este plugin
+ */
+import { SQLite } from 'ionic-native'; 
 
-import 'rxjs/add/operator/map';
+//import 'rxjs/add/operator/map';
 
 import { ConnectivityService } from '../providers/connectivity-service';
 
@@ -39,46 +42,28 @@ export class Database {
                 this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
                   this.isOpen = true;
                   this.storage.executeSql("DROP TABLE events", []);
-                  this.storage.executeSql("CREATE TABLE events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, d DATE)", []).then((data) => {
+                  this.storage.executeSql("CREATE TABLE events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, etype TEXT, d DATE)", []).then((data) => {
                       console.log("Table created: ", data);
-                      alert('Tabla creada: ' + JSON.stringify(data));
+                      //alert('Tabla creada: ' + JSON.stringify(data));
                   }, (err) => {
                     console.error('Unable to execute sql: ', err);
-                    alert('Unable to execute sql: '+ JSON.stringify(err));
+                    //alert('Unable to execute sql: '+ JSON.stringify(err));
                   });
                 }, (err) => {
                   console.error('Unable to open database: ', err);
-                  alert('Unable to open database: '+ err);
+                  //alert('Unable to open database: '+ err);
                 });
             }else {
                 alert('chrome');
 
-                /*window.openDatabase = function(dbname, ignored1, ignored2, ignored3) {
-                  return window.sqlitePlugin.openDatabase({name: dbname, location: 'default'});
-                };*/
-                //var db = null;
-
-                /*document.addEventListener('deviceready', function() {
-                  db = window.SQlite.openDatabase({name: 'demo.db', location: 'default'});
-                });*/
-
-                /*this.storage = new SQLite();
-                window.openDatabase({name: "data.db", location: "default"}).then(() => {
-                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT, lastname TEXT)", []).then(() => {
-                  }, (err) => {
-                    console.error('Unable to execute sql: ', err);
-                    alert('Unable to execute sql: '+ err);
-                  });
-                  this.isOpen = true;
-                }, (err) => {
-                  console.error('Unable to open database: ', err);
-                  alert('Unable to open database: '+ err);
-                });*/
+                /*
+                Para que funcione la base de datos en chrome no podemos usar el plugin nativo de SQLite, habría que usar this.storage = new Storage(SqlStorage); para utilizar WebSQL
+                 */
             }
         }
     }
  
-    public getPeople() {
+    public getAll() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("SELECT * FROM events", []).then((data) => {
                 let events = [];
@@ -90,6 +75,7 @@ export class Database {
                             description: data.rows.item(i).description,
                             place: data.rows.item(i).place,
                             pagurl: data.rows.item(i).pagurl,
+                            etype: data.rows.item(i).etype,
                             d: data.rows.item(i).d
                         });
                     }
@@ -101,26 +87,25 @@ export class Database {
         });
     }
  
-    public createPerson(title: string, description: string): Promise<any> {
+    public insert(title: string, description: string, place: string, pageurl: string, etype: string, d: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            let place = 'lugar de pepe';
-            let pagurl = 'www.place.com';
-            let d = '2017-01-12';
-            this.storage.executeSql("INSERT INTO events (title, description, place, pagurl, d) VALUES (?, ?, ?, ?, ?)", [title, description, place, pagurl, d]).then((data) => {
+            this.storage.executeSql("INSERT INTO events (title, description, place, pagurl, etype, d) VALUES (?, ?, ?, ?, ?, ?)", [title, description, place, pageurl, etype, d]).then((data) => {
                 resolve(data);
             }, (error) => {
                 alert('Fallo al insertar :' + JSON.stringify(error));
+                console.error('Unable to insert in the database: ', error);
                 reject(error);
             });
         });
     }
 
-    public deleteEv() {
+    public delete() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("DELETE FROM events", []).then((data) => {
                 resolve(data);
             }, (error) => {
                 alert("Fallo al borrar :" + JSON.stringify(error));
+                console.error('Unable to delete from the database: ', error);
                 reject(error);
             });
         });

@@ -11,12 +11,12 @@ import { Database } from "../../providers/database";
 
 /*
 	We start by importing the provider that we had just created.  
-	In the HomePage class we define a public variable which will be bound to the page UI.  It will contain data from the database.
-	The constructor method will do two things.  
-	It is where we inject the database provider for use in other functions and it is where we initialize the public variable.
+	In the HomePage class we define a public variable which will be bound to the page UI. It will contain data from the database.
+	
+	The constructor method is where we inject the database provider for use in other functions and it is where we initialize the public variable.
 	It is not a good idea to load data in the constructor method.  
 	Instead we’re going to load the data from the onPageDidEnter method.  
-	This method will call the load method which will call the getPeople method from the database provider.  
+	This method will call the load method which will call the getAll method from the database provider.  
 	Notice how we don’t use any SQL here or any data parsing.  Welcome to the magic of adding functionality to providers.
 	Finally there is the create method that will insert new data and then load it once it has been saved.
  */
@@ -34,7 +34,7 @@ export class Page1 {
     }
  
     public load() {
-        this.database.getPeople().then((result) => {
+        this.database.getAll().then((result) => {
             this.itemList = <Array<Object>> result;
         }, (error) => {
         	alert("ERROR load");
@@ -42,8 +42,9 @@ export class Page1 {
         });
     }
  
-    public create(firstname: string, lastname: string) {
-        this.database.createPerson(firstname, lastname).then((result) => {
+    public createEvent(title: string, description: string) {
+    	//this.database.insert(firstname, lastname, 'lugar de pepe', 'www.place.com', 'taller', '2017-01-12')
+        this.database.insert(title, description, 'lugar de pepe', 'www.place.com', 'taller', '2017-01-12').then((result) => {
             this.load();
         }, (error) => {
             console.log("ERROR: ", error);
@@ -51,7 +52,7 @@ export class Page1 {
     }
 
     public deleteEvent(){
-    	this.database.deleteEv().then((result) => {
+    	this.database.delete().then((result) => {
             this.load();
         }, (error) => {
         	alert("ERROR deleteEvent");

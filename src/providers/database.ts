@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Http } from '@angular/http';
+//import { Http } from '@angular/http';
 
 /*
 Leer https://github.com/litehelpers/Cordova-sqlite-storage para mas información sobre este plugin
@@ -9,6 +9,9 @@ import { SQLite } from 'ionic-native';
 
 //import 'rxjs/add/operator/map';
 
+/*
+Utilizaré el plugin ConnectivityService para saber si estoy accediendo a la app con un dispositivo móvil o un navegador
+ */
 import { ConnectivityService } from '../providers/connectivity-service';
 
 /*
@@ -54,10 +57,11 @@ export class Database {
                   //alert('Unable to open database: '+ err);
                 });
             }else {
-                alert('chrome');
+                alert('navegador');
 
                 /*
-                Para que funcione la base de datos en chrome no podemos usar el plugin nativo de SQLite, habría que usar this.storage = new Storage(SqlStorage); para utilizar WebSQL
+                Para que funcione la base de datos en el navegador no podemos usar el plugin nativo de SQLite, habría que usar this.storage = new Storage(SqlStorage); para utilizar WebSQL
+                (<any>window).plugins.somePlugin.doSomething();
                  */
             }
         }

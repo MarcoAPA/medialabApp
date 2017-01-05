@@ -21,7 +21,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public database:Database) {
+  constructor(public platform: Platform, public database: Database) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation

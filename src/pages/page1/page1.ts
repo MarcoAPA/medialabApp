@@ -26,6 +26,10 @@ import { readFile, IWorkBook, IWorkSheet } from '@types/xlsx';
 
 export class Page1 {
 
+	ionViewDidLoad() {
+    	this.load();
+  	}
+
     private itemList: Array<Object>;
     private wb: IWorkBook;
 
@@ -53,7 +57,7 @@ export class Page1 {
 
 	    alert(url);
     	//if (typeof require !== 'undefined') XLSX = require('xlsx');
-		this.wb = readFile('../../assets/medialab-prado_eventos.xls');
+		//this.wb = readFile('../../assets/medialab-prado_eventos.xls');
 		//alert('valor = ' + this.wb.SheetNames[0]);
 		//this.parseXLSX();
     } 
@@ -82,7 +86,7 @@ export class Page1 {
         this.database.getAll().then((result) => {
             this.itemList = <Array<Object>> result;
         }, (error) => {
-        	alert("ERROR load");
+        	alert("ERROR load :" +  JSON.stringify(error));
             console.log("ERROR: ", error);
         });
     }

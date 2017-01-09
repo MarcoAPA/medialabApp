@@ -66,7 +66,10 @@ export class Database {
             }
         }
     }
- 
+    
+    /*
+    Falta contemplar que no devuelva ningun elemento porque la tabla está vacía
+     */
     public getAll() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("SELECT * FROM events", []).then((data) => {

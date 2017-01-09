@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { Database } from "../../providers/database"; 
 
-import { readFile, IWorkBook, IWorkSheet, IUtils } from '@types/xlsx';
+import { readFile, IWorkBook, IWorkSheet } from '@types/xlsx';
 //import XLSX from 'xlsx/xlsx';
 //import { Http } from '@angular/http';
 
@@ -59,6 +59,18 @@ export class Page1 {
 
     public parseXLSX(){
 
+    	var sheet_name_list = this.wb.SheetNames;
+		sheet_name_list.forEach(function(y) { /* iterate through sheets */
+		  var worksheet = this.wb.Sheets[y];
+		  for (var ws in worksheet) {
+		    /* all keys that do not begin with "!" correspond to cell addresses */
+		    if(ws[0] === '!') continue;
+		    console.log(y + "!" + ws + "=" + JSON.stringify(worksheet[ws].v));
+		    //this.createEvent(' ', ' ');
+		  }
+		  alert(y + "!" + ws + "=" + JSON.stringify(worksheet[ws].v));
+		});
+
     }
 
     public onPageDidEnter() {
@@ -74,8 +86,8 @@ export class Page1 {
         });
     }
  
-    public createEvent(title: string, description: string) {
-    	//this.database.insert(firstname, lastname, 'lugar de pepe', 'www.place.com', 'taller', '2017-01-12')
+    public createEvent(title: string, description: string/*, place: string, pageurl: string, type: string, d: Date*/) {
+    	//this.database.insert(firstname, lastname, place, pageurl, type, d)
         this.database.insert(title, description, 'lugar de pepe', 'www.place.com', 'taller', '2017-01-12').then((result) => {
             this.load();
         }, (error) => {

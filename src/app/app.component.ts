@@ -7,6 +7,7 @@ import { Database } from "../providers/database";
 
 import { Page1 } from '../pages/page1/page1';
 import { Page2 } from '../pages/page2/page2';
+import { About } from '../pages/about/about';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Eventos', component: Page1 },
-      { title: 'Cómo llegar', component: Page2 }
+      { title: 'Cómo llegar', component: Page2 },
+      { title: 'Acerca de', component: About }
     ];
 
     this.activePage = this.pages[0];

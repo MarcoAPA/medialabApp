@@ -55,6 +55,7 @@ export class Page1 {
     	//if (typeof require !== 'undefined') XLSX = require('xlsx');
 		this.wb = readFile('../../assets/medialab-prado_eventos.xls');
 		//alert('valor = ' + this.wb.SheetNames[0]);
+		//this.parseXLSX();
     } 
 
     public parseXLSX(){

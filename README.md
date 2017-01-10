@@ -59,7 +59,7 @@ Add additional notes about how to deploy this on a live system
 ## Built With
 
 * [Ionic 2](http://ionicframework.com/docs/) - The framework used
-* [js-xlsx](https://github.com/SheetJS/js-xlsx) - Library Dependency to parse xls archives
+* [js-xlsx](https://github.com/SheetJS/js-xlsx) - Library to parse xls archives
 
 ## Contributing
 

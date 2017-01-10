@@ -1,6 +1,6 @@
-# Project Title
+# Medialab APP
 
-One Paragraph of project description goes here
+El objetivo de este trabajo es la realización de una aplicación móvil donde el usuario pueda visionar los eventos próximos del Medialab-Prado (hasta 90 días) con la posibilidad de filtrarlos por fecha, tipo y precio. Mostraremos también la ubicación del centro y como llegar hasta él desde la posición donde se encuentre el dispositivo móvil.
 
 ## Getting Started
 
@@ -58,9 +58,8 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Ionic 2](http://ionicframework.com/docs/) - The framework used
+* [js-xlsx](https://github.com/SheetJS/js-xlsx) - Library Dependency to parse xls archives
 
 ## Contributing
 
@@ -72,7 +71,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Marco Antonio Palacios Arauzo** - *Initial work* - [MarcoAPA](https://github.com/MarcoAPA)
+* **Henar Martín Dominguez** - *Initial work* - [HenarMD](https://github.com/HenarMD)
+* **Enrique García Ortiz** - *Initial work* - [elpolilla](https://github.com/elpolilla)
+* **Miguel Ángel García Solano** - *Initial work* - [miggar](https://github.com/miggar)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 

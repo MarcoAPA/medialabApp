@@ -12,6 +12,9 @@ Utilizaré el plugin ConnectivityService para saber si estoy accediendo a la app
  */
 import { ConnectivityService } from '../providers/connectivity-service';
 
+//import { read, IWorkBook, IWorkSheet } from '@types/xlsx'; //De esta forma no funciona el import
+import * as XLSX from 'xlsx';
+
 /*
   Generated class for the Database provider.
 
@@ -31,8 +34,8 @@ export class Database {
     private isOpen: boolean;
      
     /*
-        This constructor method is called every time we inject this provider into a page, 
-        but our conditional logic prevents trying to open more than one instance of the database.
+    This constructor method is called every time we inject this provider into a page, 
+    but our conditional logic prevents trying to open more than one instance of the database.
      */
     public constructor(public connectivityService: ConnectivityService) {
         if(!this.isOpen) {
@@ -50,6 +53,8 @@ export class Database {
                   this.storage.executeSql("DROP TABLE appinfo", []);
                   this.createAppInfoTable();
 
+                  this.checklastUpdate();
+                  this.getXLSRequest();
                 }, (err) => {
                   console.error('Unable to open database: ', err);
                   //alert('Unable to open database: '+ err);
@@ -64,44 +69,150 @@ export class Database {
             }
         }
     }
+
+    /*
+    Función que comprueba si la aplicación debe actualizarse o no.
+    La aplicación se actualiza todos los días cuando se entra en ella.
+    Si se debe actualizar llamamos a getXLSRequest para actualizar los eventos de la base de datos.
+     */
+    public checklastUpdate(){
+        let currentdate = this.getCurrentDate();
+        this.getInfo().then((result) => {
+            let lastupdate = result;
+            alert("lastupdate: " + JSON.stringify(lastupdate));
+        }, (error) => {
+            alert("ERROR load :" +  JSON.stringify(error));
+            console.log("ERROR: ", error);
+        });
+    }
+
+    /*
+    Función que carga el xls de la url, lo parsea e inserta los datos en la base de datos
+     */
+    public getXLSRequest(){
+        
+      var url = 'http://datos.madrid.es/egob/catalogo/209505-0-medialab-eventos.xls';
+      var oReq = new XMLHttpRequest();
+      var workbook: any;
+      //var db = this.storage;
+      var currentDate;
+
+      oReq.open("GET", url, true);
+
+      oReq.responseType = "arraybuffer";
+
+      oReq.onload = (e) => {
+
+          var arraybuffer = oReq.response;
+
+          /* convert data to binary string */
+          var data = new Uint8Array(arraybuffer);
+          var arr = new Array();
+          for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+          var bstr = arr.join("");
+        
+          workbook = XLSX.read(bstr, {type:"binary"});
+           
+          currentDate = this.getCurrentDate();
+
+          var worksheetname = workbook.SheetNames[0];
+          var worksheet = workbook.Sheets[worksheetname];
+          var rowNum;
+          for(rowNum = 1; rowNum <= worksheet['!range'].e.r; rowNum++){
+              //Inserción de la fila en la base de datos si la fecha del evento es mayor o igual que la del dia del dispositivo
+              let day = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 6})].v;
+              let month = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 7})].v;
+              let year = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 8})].v;
+              
+              if( currentDate.year <= year && currentDate.month <= month && currentDate.day <= day ){
+                  let place = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 2})].v;
+                  let pagurl = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 3})].v;
+                  let title = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 4})].v;
+                  let description = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 5})].v;
+                  let d = year + "-" + month + "-" + day;
+
+                  this.insert(title, description, place, pagurl, ' ', d ).then((result) => {
+                  }, (error) => {
+                      console.log("ERROR: ", error);
+                      alert("Error insertar xlsx: " + JSON.stringify(error));
+                  });
+              }
+          }
+      }
+
+      oReq.send();
+    }
     
     /*
     Método que crea la tabla de eventos
      */
     public createEventTable(){
 
-        this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, etype TEXT, d DATE)", []).then((data) => {
-            console.log("Table created: ", data);
-            alert('Tabla creada events: ' + JSON.stringify(data));
-        }, (err) => {
-          console.error('Unable to execute sql: ', err);
-          //alert('Unable to execute sql: '+ JSON.stringify(err));
+      this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, etype TEXT, d DATE)", []).then((data) => {
+          console.log("Table created: ", data);
+          alert('Tabla creada events: ' + JSON.stringify(data));
+      }, (err) => {
+        console.error('Unable to execute sql: ', err);
+        //alert('Unable to execute sql: '+ JSON.stringify(err));
       });  
+
     }
 
     /*
     Método que crea la tabla de eventos
      */
     public createAppInfoTable(){
-                  alert("creando tabla appinfo");
-                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS appinfo (id INTEGER PRIMARY KEY AUTOINCREMENT, lastupdate DATE)", []).then((data2) => {
-                      let date = new Date(Date.now());
-                        var currentdate = {
-                          year: date.getFullYear(),
-                          month: date.getMonth(),
-                          day: date.getDate()
-                      };
-                      this.insertInfo(currentdate.year + "-" + currentdate.month + "-" + currentdate);
-                      console.log("Table created: ", data2);
-                      alert('Tabla creada appInfo: ' + JSON.stringify(data2));
-                  }, (err) => {
-                    console.error('Unable to execute sql: ', err);
-                    alert('Unable to execute sql: '+ JSON.stringify(err));
-                  });
+
+      this.storage.executeSql("CREATE TABLE IF NOT EXISTS appinfo (id INTEGER PRIMARY KEY AUTOINCREMENT, lastupdate DATE)", []).then((data2) => {
+          let date = new Date(Date.now());
+          var currentdate = {
+              year: date.getFullYear(),
+              month: date.getMonth(),
+              day: date.getDate()
+          };
+          this.insertInfo(currentdate.year + "-" + currentdate.month + "-" + currentdate.day);
+          console.log("Table created: ", data2);
+          alert('Tabla creada appInfo: ' + JSON.stringify(data2));
+      }, (err) => {
+        console.error('Unable to execute sql: ', err);
+        alert('Unable to execute sql: '+ JSON.stringify(err));
+      });
+
     }
 
     /*
-    Falta contemplar que no devuelva ningun elemento porque la tabla está vacía
+    Método que inserta una fila en la tabla appinfo
+     */
+    public insertInfo(d: string){
+      return new Promise((resolve, reject) => {
+          this.storage.executeSql("INSERT INTO appinfo (lastupdate) VALUES (?)", [d]).then((data) => {
+              resolve(data);
+          }, (error) => {
+              alert('Fallo al insertar :' + JSON.stringify(error));
+              console.error('Unable to insert in the database: ', error);
+              reject(error);
+          });
+      });  
+    }
+
+    /*
+    Métodos que devuelve las últimas fechas de acceso al xls
+     */
+    public getInfo() {
+        return new Promise((resolve, reject) => {
+            this.storage.executeSql("SELECT lastupdate FROM appinfo", []).then((data) => {
+              let lup = data.rows.item(0).lastupdate;
+              resolve(lup);
+            }, (error) => {
+                alert('Fallo al obtener info :' + JSON.stringify(error));
+                console.error('Unable to obtain info from the database: ', error);
+                reject(error);
+            });
+        });
+    }
+
+    /*
+    Método que devuelve todos los datos de la tabla de eventos
      */
     public getAll() {
         return new Promise((resolve, reject) => {
@@ -126,31 +237,10 @@ export class Database {
             });
         });
     }
-   
-    public insertInfo(d: string){
-      return new Promise((resolve, reject) => {
-          this.storage.executeSql("INSERT INTO appinfo (lastupdate) VALUES (?)", [d]).then((data) => {
-              resolve(data);
-          }, (error) => {
-              alert('Fallo al insertar :' + JSON.stringify(error));
-              console.error('Unable to insert in the database: ', error);
-              reject(error);
-          });
-      });  
-    }
 
-    public getInfo() {
-        return new Promise((resolve, reject) => {
-            this.storage.executeSql("SELECT lastupdate FROM infoapp", []).then((data) => {
-                resolve(data);
-            }, (error) => {
-                alert('Fallo al obtener info :' + JSON.stringify(error));
-                console.error('Unable to obtain info from the database: ', error);
-                reject(error);
-            });
-        });
-    }
-
+    /*
+    Método que inserta una fila en la tabla eventos
+     */
     public insert(title: string, description: string, place: string, pageurl: string, etype: string, d: string): Promise<any> {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("INSERT INTO events (title, description, place, pagurl, etype, d) VALUES (?, ?, ?, ?, ?, ?)", [title, description, place, pageurl, etype, d]).then((data) => {
@@ -163,6 +253,9 @@ export class Database {
         });
     }
 
+    /*
+    Método que borra las filas de la tabla eventos
+     */
     public delete() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("DELETE FROM events", []).then((data) => {
@@ -174,5 +267,15 @@ export class Database {
             });
         });
     }
- 
+
+    public getCurrentDate(){
+      let date = new Date(Date.now());
+      var currentdate = {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate()
+     };
+     return currentdate;
+    }
+   
 }

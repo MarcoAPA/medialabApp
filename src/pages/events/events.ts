@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { Database } from "../../providers/database"; 
 
-//import { read, IWorkBook, IWorkSheet } from '@types/xlsx'; //De esta forma no funciona el import
-import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'page-events',
@@ -25,87 +23,25 @@ import * as XLSX from 'xlsx';
 
 export class Events {
 
-    ionViewDidEnter(){
+    /*ionViewDidLoad(){
+
+        // Create the loading popup
+        this.loading = this.loadingCtrl.create({
+          content: 'Loading...'
+        });
+
+        // Show the popup
+        this.loading.present();
+
+        this.checklastUpdate();
         this.load();
-    }
+    }*/
 
     private itemList: Array<Object>;
+    //private loading;
 
-    public constructor(private navController: NavController, public database: Database) {
+    public constructor(private navController: NavController, public database: Database, private loadingCtrl: LoadingController) {
         this.itemList = [];
-        this.getXLSRequest();
-        //this.checklastUpdate();
-    }
-
-    /*
-    Función que comprueba si la aplicación debe actualizarse o no.
-    La aplicación se actualiza todos los días cuando se entra en ella.
-    Si se debe actualizar llamamos a getXLSRequest para actualizar los eventos de la base de datos.
-     */
-    public checklastUpdate(){
-
-        let currentdate = this.getCurrentDate();
-        this.database.getInfo().then((result) => {
-            let lastupdate = <Array<Object>> result;
-            alert("lastupdate: " + JSON.stringify(lastupdate));
-        }, (error) => {
-            alert("ERROR load :" +  JSON.stringify(error));
-            console.log("ERROR: ", error);
-        });
-    }
-
-    public getXLSRequest(){
-        
-        var url = 'http://datos.madrid.es/egob/catalogo/209505-0-medialab-eventos.xls';
-        var oReq = new XMLHttpRequest();
-        var workbook: any;
-        var db = this.database;
-        var currentDate;
-
-        oReq.open("GET", url, true);
-
-        oReq.responseType = "arraybuffer";
-
-        oReq.onload = (e) => {
-
-            var arraybuffer = oReq.response;
-
-            /* convert data to binary string */
-            var data = new Uint8Array(arraybuffer);
-            var arr = new Array();
-            for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-            var bstr = arr.join("");
-          
-            workbook = XLSX.read(bstr, {type:"binary"});
-             
-            let currentDate = this.getCurrentDate();
-
-            var worksheetname = workbook.SheetNames[0];
-            var worksheet = workbook.Sheets[worksheetname];
-            var rowNum;
-            for(rowNum = 1; rowNum <= worksheet['!range'].e.r; rowNum++){
-                //Inserción de la fila en la base de datos si la fecha del evento es mayor o igual que la del dia del dispositivo
-                let day = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 6})].v;
-                let month = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 7})].v;
-                let year = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 8})].v;
-                
-                if( currentDate.year <= year && currentDate.month <= month && currentDate.day <= day ){
-                    let place = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 2})].v;
-                    let pagurl = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 3})].v;
-                    let title = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 4})].v;
-                    let description = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 5})].v;
-                    let d = year + "-" + month + "-" + day;
-
-                    db.insert(title, description, place, pagurl, ' ', d ).then((result) => {
-                    }, (error) => {
-                        console.log("ERROR: ", error);
-                        alert("Error insertar xlsx: " + JSON.stringify(error));
-                    });
-                }
-            }
-        }
-
-        oReq.send();
     }
  
     public load() {
@@ -133,16 +69,6 @@ export class Events {
             alert("ERROR deleteEvent");
             console.log("ERROR: ", error);
         });
-    }
-
-    public getCurrentDate(){
-       let date = new Date(Date.now());
-       var currentdate = {
-           year: date.getFullYear(),
-           month: date.getMonth(),
-           day: date.getDate()
-       };
-       return currentdate;
     }
 
 }

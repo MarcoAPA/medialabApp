@@ -4,7 +4,8 @@ import { NavController } from 'ionic-angular';
 
 import { Database } from "../../providers/database"; 
 
-import { readFile, IWorkBook, IWorkSheet } from '@types/xlsx';
+//import { read, IWorkBook, IWorkSheet } from '@types/xlsx'; //De esta forma no funciona el import
+import * as XLSX from 'xlsx';
 //import XLSX from 'xlsx/xlsx';
 //import { Http } from '@angular/http';
 
@@ -25,13 +26,16 @@ import { readFile, IWorkBook, IWorkSheet } from '@types/xlsx';
  */
 
 export class Page1 {
+	
+	ionVierDidLoad() {
+        
+	}
 
-	ionViewDidLoad() {
+	ionViewDidEnter() {
     	this.load();
   	}
 
     private itemList: Array<Object>;
-    private wb: IWorkBook;
 
     public constructor(private navController: NavController, public database: Database) {
         this.itemList = [];
@@ -41,50 +45,64 @@ export class Page1 {
     public getXLSRequest(){
     	
     	var url = 'http://datos.madrid.es/egob/catalogo/209505-0-medialab-eventos.xls';
-    	//var XLSX: any;
- 		
- 		/*turn new Promise(resolve => {
-	      // We're using Angular Http provider to request the data,
-	      // then on the response it'll map the JSON data to a parsed JS object.
-	      // Next we process the data and resolve the promise with the new data.
-	      this.Http.get(url)
-	        .subscribe( data => {
-	          console.log( 'Raw Data', data );
-	          alert('data' + JSON.stringify(data));
-	          resolve(data);
-	        });
-	    });*/
+    	var oReq = new XMLHttpRequest();
+    	var workbook: any;
+    	var db = this.database;
+    	var currentDate;
 
-	    alert(url);
-    	//if (typeof require !== 'undefined') XLSX = require('xlsx');
-		//this.wb = readFile('../../assets/medialab-prado_eventos.xls');
-		//alert('valor = ' + this.wb.SheetNames[0]);
-		//this.parseXLSX();
-    } 
+		oReq.open("GET", url, true);
 
-    public parseXLSX(){
+		oReq.responseType = "arraybuffer";
 
-    	var sheet_name_list = this.wb.SheetNames;
-		sheet_name_list.forEach(function(y) { /* iterate through sheets */
-		  var worksheet = this.wb.Sheets[y];
-		  for (var ws in worksheet) {
-		    /* all keys that do not begin with "!" correspond to cell addresses */
-		    if(ws[0] === '!') continue;
-		    console.log(y + "!" + ws + "=" + JSON.stringify(worksheet[ws].v));
-		    //this.createEvent(' ', ' ');
-		  }
-		  alert(y + "!" + ws + "=" + JSON.stringify(worksheet[ws].v));
-		});
+		oReq.onload = function(e) {
 
-    }
+			var arraybuffer = oReq.response;
 
-    public onPageDidEnter() {
-        this.load();
+		  	/* convert data to binary string */
+		  	var data = new Uint8Array(arraybuffer);
+		  	var arr = new Array();
+		  	for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+		  	var bstr = arr.join("");
+		  
+		 	workbook = XLSX.read(bstr, {type:"binary"});
+		 	
+		 	currentDate = new Date(Date.now());
+			let currentYear = currentDate.getFullYear();
+			let currentMonth = currentDate.getMonth()+1;
+			let currentDay = currentDate.getDate();
+
+			var worksheetname = workbook.SheetNames[0];
+			var worksheet = workbook.Sheets[worksheetname];
+			var rowNum;
+			for(rowNum = 1; rowNum <= worksheet['!range'].e.r; rowNum++){
+				//Inserción de la fila en la base de datos si la fecha del evento es mayor o igual que la del dia del dispositivo
+				let day = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 6})].v;
+				let month = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 7})].v;
+				let year = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 8})].v;
+				
+				if( currentYear <= year && currentMonth <= month && currentDay <= day ){
+					let place = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 2})].v;
+					let pagurl = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 3})].v;
+					let title = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 4})].v;
+					let description = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 5})].v;
+					let d = year + "-" + month + "-" + day;
+
+					db.insert(title, description, place, pagurl, ' ', d ).then((result) => {
+			        }, (error) => {
+			            console.log("ERROR: ", error);
+			            alert("Error insertar xlsx: " + JSON.stringify(error));
+			        });
+			    }
+			}
+		}
+
+		oReq.send();
+
     }
  
     public load() {
         this.database.getAll().then((result) => {
-            this.itemList = <Array<Object>> result;
+            	this.itemList = <Array<Object>> result;
         }, (error) => {
         	alert("ERROR load :" +  JSON.stringify(error));
             console.log("ERROR: ", error);

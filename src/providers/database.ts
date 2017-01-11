@@ -40,12 +40,12 @@ export class Database {
         if(!this.isOpen) {
             /* Compruebo si estoy en un dispositivo o en un navegador */
             if (connectivityService.onDevice){
-                alert('device');
+                //alert('device');
                 this.storage = new SQLite();
                 this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
                   this.isOpen = true;
                   this.storage.executeSql("DROP TABLE events", []);
-                  this.storage.executeSql("CREATE TABLE events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, etype TEXT, d DATE)", []).then((data) => {
+                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, etype TEXT, d DATE)", []).then((data) => {
                       console.log("Table created: ", data);
                       //alert('Tabla creada: ' + JSON.stringify(data));
                   }, (err) => {
@@ -57,7 +57,7 @@ export class Database {
                   //alert('Unable to open database: '+ err);
                 });
             }else {
-                alert('navegador');
+                //alert('navegador');
 
                 /*
                 Para que funcione la base de datos en el navegador no podemos usar el plugin nativo de SQLite, habría que usar this.storage = new Storage(SqlStorage); para utilizar WebSQL
@@ -67,9 +67,6 @@ export class Database {
         }
     }
     
-    /*
-    Falta contemplar que no devuelva ningun elemento porque la tabla está vacía
-     */
     public getAll() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("SELECT * FROM events", []).then((data) => {
@@ -89,6 +86,7 @@ export class Database {
                 }
                 resolve(events);
             }, (error) => {
+                alert("Fallo en getAll :" +  JSON.stringify(error));
                 reject(error);
             });
         });

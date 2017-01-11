@@ -22113,33 +22113,33 @@ sub {
   background-color: #387ef5;
 }
 
-page-page2 .scroll-content {
+page-maps .scroll-content {
   height: 100%;
 }
 
-page-page2 #map {
+page-maps #map {
   width: 100%;
   height: 50%;
 }
 
-page-page2 #directionsPanel {
+page-maps #directionsPanel {
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
 }
 
-page-page2 #directionsPanel select, page-page2 #directionsPanel input {
+page-maps #directionsPanel select, page-maps #directionsPanel input {
   font-size: 15px;
 }
 
-page-page2 #directionsPanel select {
+page-maps #directionsPanel select {
   width: 100%;
 }
 
-page-page2 #directionsPanel i {
+page-maps #directionsPanel i {
   font-size: 12px;
 }
 
-page-page2 #directionsPanel {
+page-maps #directionsPanel {
   height: 50%;
   float: left;
   width: auto;

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-//import { Http } from '@angular/http';
-
 /*
 Leer https://github.com/litehelpers/Cordova-sqlite-storage para mas información sobre este plugin
  */
@@ -41,32 +39,70 @@ export class Database {
             /* Compruebo si estoy en un dispositivo o en un navegador */
             if (connectivityService.onDevice){
                 //alert('device');
+
                 this.storage = new SQLite();
                 this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
                   this.isOpen = true;
+
                   this.storage.executeSql("DROP TABLE events", []);
-                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, etype TEXT, d DATE)", []).then((data) => {
-                      console.log("Table created: ", data);
-                      //alert('Tabla creada: ' + JSON.stringify(data));
-                  }, (err) => {
-                    console.error('Unable to execute sql: ', err);
-                    //alert('Unable to execute sql: '+ JSON.stringify(err));
-                  });
+                  this.createEventTable();
+
+                  this.storage.executeSql("DROP TABLE appinfo", []);
+                  this.createAppInfoTable();
+
                 }, (err) => {
                   console.error('Unable to open database: ', err);
                   //alert('Unable to open database: '+ err);
                 });
             }else {
-                //alert('navegador');
-
-                /*
-                Para que funcione la base de datos en el navegador no podemos usar el plugin nativo de SQLite, habría que usar this.storage = new Storage(SqlStorage); para utilizar WebSQL
-                (<any>window).plugins.somePlugin.doSomething();
-                 */
+              //alert('navegador');
+              
+              /*
+              Para que funcione la base de datos en el navegador no podemos usar el plugin nativo de SQLite, habría que usar this.storage = new Storage(SqlStorage); para utilizar WebSQL
+              (<any>window).plugins.somePlugin.doSomething();
+              */
             }
         }
     }
     
+    /*
+    Método que crea la tabla de eventos
+     */
+    public createEventTable(){
+
+        this.storage.executeSql("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, place TEXT, pagurl TEXT, etype TEXT, d DATE)", []).then((data) => {
+            console.log("Table created: ", data);
+            alert('Tabla creada events: ' + JSON.stringify(data));
+        }, (err) => {
+          console.error('Unable to execute sql: ', err);
+          //alert('Unable to execute sql: '+ JSON.stringify(err));
+      });  
+    }
+
+    /*
+    Método que crea la tabla de eventos
+     */
+    public createAppInfoTable(){
+                  alert("creando tabla appinfo");
+                  this.storage.executeSql("CREATE TABLE IF NOT EXISTS appinfo (id INTEGER PRIMARY KEY AUTOINCREMENT, lastupdate DATE)", []).then((data2) => {
+                      let date = new Date(Date.now());
+                        var currentdate = {
+                          year: date.getFullYear(),
+                          month: date.getMonth(),
+                          day: date.getDate()
+                      };
+                      this.insertInfo(currentdate.year + "-" + currentdate.month + "-" + currentdate);
+                      console.log("Table created: ", data2);
+                      alert('Tabla creada appInfo: ' + JSON.stringify(data2));
+                  }, (err) => {
+                    console.error('Unable to execute sql: ', err);
+                    alert('Unable to execute sql: '+ JSON.stringify(err));
+                  });
+    }
+
+    /*
+    Falta contemplar que no devuelva ningun elemento porque la tabla está vacía
+     */
     public getAll() {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("SELECT * FROM events", []).then((data) => {
@@ -86,12 +122,35 @@ export class Database {
                 }
                 resolve(events);
             }, (error) => {
-                alert("Fallo en getAll :" +  JSON.stringify(error));
                 reject(error);
             });
         });
     }
- 
+   
+    public insertInfo(d: string){
+      return new Promise((resolve, reject) => {
+          this.storage.executeSql("INSERT INTO appinfo (lastupdate) VALUES (?)", [d]).then((data) => {
+              resolve(data);
+          }, (error) => {
+              alert('Fallo al insertar :' + JSON.stringify(error));
+              console.error('Unable to insert in the database: ', error);
+              reject(error);
+          });
+      });  
+    }
+
+    public getInfo() {
+        return new Promise((resolve, reject) => {
+            this.storage.executeSql("SELECT lastupdate FROM infoapp", []).then((data) => {
+                resolve(data);
+            }, (error) => {
+                alert('Fallo al obtener info :' + JSON.stringify(error));
+                console.error('Unable to obtain info from the database: ', error);
+                reject(error);
+            });
+        });
+    }
+
     public insert(title: string, description: string, place: string, pageurl: string, etype: string, d: string): Promise<any> {
         return new Promise((resolve, reject) => {
             this.storage.executeSql("INSERT INTO events (title, description, place, pagurl, etype, d) VALUES (?, ?, ?, ?, ?, ?)", [title, description, place, pageurl, etype, d]).then((data) => {

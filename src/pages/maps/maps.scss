@@ -1,0 +1,35 @@
+page-maps {
+	
+	.scroll-content {
+      height: 100%
+    }
+ 
+    #map {
+      width: 100%;
+      height: 50%;
+    }
+
+    #directionsPanel {
+      font-family: 'Roboto','sans-serif';
+      line-height: 30px;
+    }
+
+    #directionsPanel select, #directionsPanel input {
+      font-size: 15px;
+    }
+
+    #directionsPanel select {
+      width: 100%;
+    }
+
+    #directionsPanel i {
+      font-size: 12px;
+    }
+    #directionsPanel {
+      height: 50%;
+      float: left;
+      width: auto;
+      overflow: auto;
+    }
+	
+}

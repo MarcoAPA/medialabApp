@@ -5,8 +5,8 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 /* Añadimos la DB para poder usarla de forma global en la aplicación */
 import { Database } from "../providers/database";
 
-import { Page1 } from '../pages/page1/page1';
-import { Page2 } from '../pages/page2/page2';
+import { Events } from '../pages/events/events';
+import { Maps } from '../pages/maps/maps';
 import { About } from '../pages/about/about';
 
 
@@ -17,7 +17,7 @@ import { About } from '../pages/about/about';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = Page1;
+  rootPage: any = Events;
   activePage: any;
 
   pages: Array<{title: string, component: any}>;
@@ -27,8 +27,8 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Eventos', component: Page1 },
-      { title: 'Cómo llegar', component: Page2 },
+      { title: 'Eventos', component: Events },
+      { title: 'Cómo llegar', component: Maps },
       { title: 'Acerca de', component: About }
     ];
 

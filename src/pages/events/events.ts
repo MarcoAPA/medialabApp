@@ -23,33 +23,57 @@ import { Database } from "../../providers/database";
 
 export class Events {
 
-    /*ionViewDidLoad(){
+    ionViewDidEnter(){
 
         // Create the loading popup
         this.loading = this.loadingCtrl.create({
-          content: 'Loading...'
+          spinner: 'bubbles',
+          content: 'Cargando eventos...'
         });
 
-        // Show the popup
+        // Show the loading popup
         this.loading.present();
 
-        this.checklastUpdate();
+        //this.checklastUpdate();
+
+        //setTimeout(30000);
+
+        this.load().then((result) => {
+            //this.itemList = <Array<Object>> result;
+            //alert("realizado el load :" + JSON.stringify(result));  
+            if (result = []){
+                this.load();
+            } 
+        }, (error) => {
+            alert("ERROR load onDid :" +  JSON.stringify(error));
+            console.log("ERROR load onDid: ", error);
+        });
+
+        // Dismiss the loading popup because data is ready
+        this.loading.dismiss();
+    }
+
+    /*ionViewDidLoad(){
         this.load();
     }*/
 
     private itemList: Array<Object>;
-    //private loading;
+    private loading;
 
     public constructor(private navController: NavController, public database: Database, private loadingCtrl: LoadingController) {
         this.itemList = [];
     }
  
     public load() {
-        this.database.getAll().then((result) => {
+        return new Promise((resolve, reject) => {
+            this.database.getAll().then((result) => {
                 this.itemList = <Array<Object>> result;
-        }, (error) => {
-            alert("ERROR load :" +  JSON.stringify(error));
-            console.log("ERROR: ", error);
+                resolve(result);
+            }, (error) => {
+                alert("ERROR load :" +  JSON.stringify(error));
+                console.log("ERROR: ", error);
+                reject(error);
+            });
         });
     }
  

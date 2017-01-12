@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Wed Jan 11 20:34:42 CET 2017
+#Wed Jan 11 20:50:22 CET 2017
 5.base=C\:\\Users\\marco.a.palacios\\Documents\\Ricoh Workspace\\medialabAPP\\platforms\\android\\build\\intermediates\\assets\\debug
 42.base=C\:\\Users\\marco.a.palacios\\Documents\\Ricoh Workspace\\medialabAPP\\platforms\\android\\build\\intermediates\\assets\\debug
 32.set=ASSET

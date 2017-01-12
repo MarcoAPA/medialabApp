@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { ConnectivityService } from '../../providers/connectivity-service';
 
@@ -23,9 +23,10 @@ export class Maps {
   private map: any;
   private mapInitialised: boolean = false;
   private apiKey: 'AIzaSyBlrDUzc42lKRhjbVc_zD0sM1sJgyLEqjE'; /* API key de Google Maps*/
-  TransportMode: any = this;
+  private loading;
+  private TransportMode: any = this;
 
-  public constructor(public navCtrl: NavController, public connectivityService: ConnectivityService) {
+  public constructor(public navCtrl: NavController, private loadingCtrl: LoadingController, public connectivityService: ConnectivityService) {
     this.loadGoogleMaps();
     this.TransportMode = "walkB"; //Para indicar la pestaña por defecto doy valor inicial al ngModel TransportMode
   }
@@ -78,7 +79,15 @@ export class Maps {
   }
  
   public initMap(){
- 
+   
+    // Create the loading popup
+    this.loading = this.loadingCtrl.create({
+      spinner: 'bubbles',
+      content: 'Cargando ruta...'
+    });
+    // Show the loading popup
+    this.loading.present();
+
     this.mapInitialised = true;
      
     Geolocation.getCurrentPosition().then((position) => {
@@ -174,6 +183,9 @@ export class Maps {
       }*/
 
     });
+
+    // Dismiss the loading popup because data is ready
+    this.loading.dismiss();
   }
  
   public disableMap(){

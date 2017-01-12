@@ -1,4 +1,4 @@
-#Wed Jan 11 20:34:42 CET 2017
+#Thu Jan 12 14:11:13 CET 2017
 base.0=C\:\\Users\\marco.a.palacios\\Documents\\Ricoh Workspace\\medialabAPP\\platforms\\android\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
 renamed.0=classes.dex
 file.0=C\:\\Users\\marco.a.palacios\\Documents\\Ricoh Workspace\\medialabAPP\\platforms\\android\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex

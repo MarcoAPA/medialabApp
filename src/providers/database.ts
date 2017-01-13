@@ -47,7 +47,7 @@ export class Database {
               this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
                 this.isOpen = true;
 
-                //this.checklastUpdate();
+                //this.initializeDB();
 
                 this.dropE().then((result) => {
                     //alert("events borrada");   
@@ -77,12 +77,19 @@ export class Database {
                     console.log("ERROR: ", error);
                 });
 
-                this.getXLSRequest().then((result) => {
-                    //alert("cargados eventos");   
+                /*this.checklastUpdate().then((result) => {
+                    alert("comprobar lastupdate :" + JSON.stringify(result));   
                 }, (error) => {
                     alert("ERROR load :" +  JSON.stringify(error));
                     console.log("ERROR: ", error);
-                });
+                });*/
+
+                this.getXLSRequest();/*.then((result) => {
+                    alert("cargados eventos");   
+                }, (error) => {
+                    alert("ERROR load :" +  JSON.stringify(error));
+                    console.log("ERROR: ", error);
+                });*/
 
               }, (error) => {
                 console.error('Unable to open database: ', error);
@@ -100,12 +107,31 @@ export class Database {
     }
 
     /*
+    Inicializa la base de datos
+     */
+    /*public initializeDB(){
+      Promise.all([
+         this.dropE(),
+         this.dropAPPI(),
+         this.createEventTable(),
+         this.createAppInfoTable(),
+         //this.checklastUpdate(),
+         this.getXLSRequest()
+      ]).then((result) => {
+          alert("Inicialización terminada");
+      }, (error) => {
+          alert("ERROR inicializando :" +  JSON.stringify(error));
+          console.log("ERROR: ", error);
+      });
+    }*/
+
+    /*
     Método para borrar la tabla events
      */
     public dropE(){
       return new Promise((resolve, reject) => {
         this.storage.executeSql("DROP TABLE events", []).then((data) => {
-          resolve(data);
+            resolve(data);
         }, (error) => {
             reject(error);
             console.error('Unable to drop Evets table: ', error);
@@ -120,7 +146,7 @@ export class Database {
     public dropAPPI(){
       return new Promise((resolve, reject) => {
         this.storage.executeSql("DROP TABLE appinfo", []).then((data) => {
-          resolve(data);
+            resolve(data);
         }, (error) => {
             reject(error);
             console.error('Unable to drop appinfo table ', error);
@@ -152,14 +178,9 @@ export class Database {
      */
     public createAppInfoTable(){
       return new Promise((resolve, reject) => {
-        this.storage.executeSql("CREATE TABLE IF NOT EXISTS appinfo (id INTEGER PRIMARY KEY AUTOINCREMENT, lastupdate DATE)", []).then((data) => {
-            let date = new Date(Date.now());
-            var currentdate = {
-                year: date.getFullYear(),
-                month: date.getMonth(),
-                day: date.getDate()
-            };
-            this.insertInfo(currentdate.year + "-" + currentdate.month + 1 + "-" + currentdate.day);
+        this.storage.executeSql("CREATE TABLE IF NOT EXISTS appinfo (id INTEGER PRIMARY KEY AUTOINCREMENT, year INTEGER, month INTEGER, day INTEGER)", []).then((data) => {
+            let currentDate = this.getCurrentDate();
+            this.insertInfo(currentDate.year, + currentDate.month, currentDate.day);
             console.log("Table created: ", data);
             //alert('Tabla creada appInfo: ' + JSON.stringify(data));
             resolve(data);
@@ -176,80 +197,88 @@ export class Database {
     La aplicación se actualiza todos los días cuando se entra en ella.
     Si se debe actualizar llamamos a getXLSRequest para actualizar los eventos de la base de datos.
      */
-    /*public checklastUpdate(){
-        let currentdate = this.getCurrentDate();
+    public checklastUpdate(){
+      return new Promise((resolve, reject) => { 
+        var currentDate = this.getCurrentDate();
         this.getInfo().then((result) => {
-            let lastupdate = result;
-            alert("lastupdate: " + JSON.stringify(lastupdate));
+            let lastupdate = result[0];
+            if (currentDate.year >= lastupdate.year){
+              if (currentDate.month >= lastupdate.month){
+                if ( currentDate.day > lastupdate.day){
+                  this.getXLSRequest();
+                }
+              }
+            } 
+            resolve(lastupdate.year +"-"+lastupdate.month +"-"+lastupdate.day);
         }, (error) => {
-            alert("ERROR load :" +  JSON.stringify(error));
             console.log("ERROR: ", error);
+            reject(error);
         });
-    }*/
+      });
+    }
 
     /*
     Función que carga el xls de la url, lo parsea e inserta los datos en la base de datos
      */
     public getXLSRequest(){
-      return new Promise((resolve, reject) => {  
-        var url = 'http://datos.madrid.es/egob/catalogo/209505-0-medialab-eventos.xls';
-        var oReq = new XMLHttpRequest();
-        var workbook: any;
-        //var db = this.storage;
-        var currentDate;
+      alert("Accedo a getxlsxrequest");
+      var url = 'http://datos.madrid.es/egob/catalogo/209505-0-medialab-eventos.xls';
+      var oReq = new XMLHttpRequest();
+      var workbook: any;
+      //var db = this.storage;
+      var currentDate;
 
-        oReq.open("GET", url, true);
+      oReq.open("GET", url, true);
 
-        oReq.responseType = "arraybuffer";
+      oReq.responseType = "arraybuffer";
 
-        oReq.onload = (e) => {
+      oReq.onload = (e) => {
 
-            var arraybuffer = oReq.response;
+          var arraybuffer = oReq.response;
 
-            /* convert data to binary string */
-            var data = new Uint8Array(arraybuffer);
-            var arr = new Array();
-            for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-            var bstr = arr.join("");
-          
-            workbook = XLSX.read(bstr, {type:"binary"});
-             
-            currentDate = this.getCurrentDate();
+          /* convert data to binary string */
+          var data = new Uint8Array(arraybuffer);
+          var arr = new Array();
+          for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+          var bstr = arr.join("");
+        
+          workbook = XLSX.read(bstr, {type:"binary"});
+           
+          currentDate = this.getCurrentDate();
 
-            var worksheetname = workbook.SheetNames[0];
-            var worksheet = workbook.Sheets[worksheetname];
-            var rowNum;
-            for(rowNum = 1; rowNum <= worksheet['!range'].e.r; rowNum++){
-                //Inserción de la fila en la base de datos si la fecha del evento es mayor o igual que la del dia del dispositivo
-                let day = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 6})].v;
-                let month = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 7})].v;
-                let year = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 8})].v;
-                
-                if( currentDate.year <= year && currentDate.month <= month && currentDate.day <= day ){
-                    let place = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 2})].v;
-                    let pagurl = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 3})].v;
-                    let title = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 4})].v;
-                    let description = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 5})].v;
-                    let d = year + "-" + month + "-" + day;
+          var worksheetname = workbook.SheetNames[0];
+          var worksheet = workbook.Sheets[worksheetname];
+          var rowNum;
+          for(rowNum = 1; rowNum <= worksheet['!range'].e.r; rowNum++){
+              //Inserción de la fila en la base de datos si la fecha del evento es mayor o igual que la del dia del dispositivo
+              let day = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 6})].v;
+              let month = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 7})].v;
+              let year = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 8})].v;
+              
+              if( currentDate.year <= year && currentDate.month <= month && currentDate.day <= day ){
+                  let place = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 2})].v;
+                  let pagurl = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 3})].v;
+                  let title = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 4})].v;
+                  let description = worksheet[XLSX.utils.encode_cell({r: rowNum, c: 5})].v;
+                  let d = year + "-" + month + "-" + day;
 
-                    this.insert(title, description, place, pagurl, ' ', d ).then((result) => {
-                    }, (error) => {
-                        console.log("ERROR: ", error);
-                        alert("Error al insertar xlsx: " + JSON.stringify(error));
-                    });
-                }
-            }
-        }
-        oReq.send();
-      });
+                  this.insert(title, description, place, pagurl, ' ', d ).then((result) => {
+                  }, (error) => {
+                      console.log("ERROR: ", error);
+                      alert("Error al insertar xlsx: " + JSON.stringify(error));
+                  });
+              }
+          }
+      }
+      oReq.send();
     }
 
     /*
     Método que inserta una fila en la tabla appinfo
      */
-    public insertInfo(d: string){
+    public insertInfo(y: number, m: number, d: number){
       return new Promise((resolve, reject) => {
-          this.storage.executeSql("INSERT INTO appinfo (lastupdate) VALUES (?)", [d]).then((data) => {
+          this.storage.executeSql("INSERT INTO appinfo (year, month, day) VALUES (?, ?, ?)", [y, m, d]).then((data) => {
               resolve(data);
           }, (error) => {
               alert('Fallo al insertar :' + JSON.stringify(error));
@@ -264,8 +293,12 @@ export class Database {
      */
     public getInfo() {
       return new Promise((resolve, reject) => {
-          this.storage.executeSql("SELECT lastupdate FROM appinfo", []).then((data) => {
-              let lup = data.rows.item(0).lastupdate;
+          this.storage.executeSql("SELECT year, month, day FROM appinfo", []).then((data) => {
+              let lup = {
+                year: data.rows.item(0).year,
+                month: data.rows.item(0).month,
+                day: data.rows.item(0).day
+              };
               alert("lastupdate: " + JSON.stringify(lup));
               resolve(lup);
           }, (error) => {
@@ -337,7 +370,7 @@ export class Database {
       let date = new Date(Date.now());
       var currentdate = {
         year: date.getFullYear(),
-        month: date.getMonth(),
+        month: date.getMonth() + 1,
         day: date.getDate()
      };
      return currentdate;

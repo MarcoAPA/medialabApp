@@ -25,6 +25,24 @@ export class Events {
 
     ionViewDidEnter(){
 
+        this.load().then((result) => {
+                   
+            if (result = []){
+                this.load();
+            } 
+   
+        }, (error) => {
+            alert("ERROR load :" +  JSON.stringify(error));
+            console.log("ERROR: ", error);
+        });
+
+        
+
+        // Dismiss the loading popup because data is ready
+        this.loading.dismiss();
+    }
+
+    ionViewWillEnter(){
         // Create the loading popup
         this.loading = this.loadingCtrl.create({
           spinner: 'bubbles',
@@ -33,29 +51,7 @@ export class Events {
 
         // Show the loading popup
         this.loading.present();
-
-        //this.checklastUpdate();
-
-        //setTimeout(30000);
-
-        this.load().then((result) => {
-            //this.itemList = <Array<Object>> result;
-            //alert("realizado el load :" + JSON.stringify(result));  
-            if (result = []){
-                this.load();
-            } 
-        }, (error) => {
-            alert("ERROR load onDid :" +  JSON.stringify(error));
-            console.log("ERROR load onDid: ", error);
-        });
-
-        // Dismiss the loading popup because data is ready
-        this.loading.dismiss();
     }
-
-    /*ionViewDidLoad(){
-        this.load();
-    }*/
 
     private itemList: Array<Object>;
     private loading;
@@ -67,8 +63,8 @@ export class Events {
     public load() {
         return new Promise((resolve, reject) => {
             this.database.getAll().then((result) => {
-                this.itemList = <Array<Object>> result;
-                resolve(result);
+               this.itemList = <Array<Object>> result;
+               resolve(result);
             }, (error) => {
                 alert("ERROR load :" +  JSON.stringify(error));
                 console.log("ERROR: ", error);
@@ -76,7 +72,7 @@ export class Events {
             });
         });
     }
- 
+
     public createEvent(title: string, description: string/*, place: string, pageurl: string, type: string, d: Date*/) {
         //this.database.insert(firstname, lastname, place, pageurl, type, d)
         this.database.insert(title, description, 'lugar de pepe', 'www.place.com', 'taller', '2017-01-12').then((result) => {

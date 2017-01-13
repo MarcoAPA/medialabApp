@@ -1,5 +1,7 @@
 # Medialab APP
 
+The objetive of this work is the realization of a movile application where users can view Medialab-Prado upcoming events and filter them by date, type and price. We also provide the location of Medialab-Prado and how to get there from the device current position on walk, by car and by public transport. 
+
 El objetivo de este trabajo es la realización de una aplicación móvil donde el usuario pueda visionar los eventos próximos del Medialab-Prado (hasta 90 días) con la posibilidad de filtrarlos por fecha, tipo y precio. Mostraremos también la ubicación del centro y como llegar hasta él desde la posición donde se encuentre el dispositivo móvil.
 
 ## Getting Started
@@ -8,66 +10,59 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+You need to have node.js installed. You can download node.js from [here](https://nodejs.org/en/) and follow the installation steps.
 
 ### Installing
 
 A step by step series of examples that tell you have to get a development env running
 
-Say what the step will be
+First you need to Install ionic 2 and Cordova vian npm
 
 ```
-Give the example
+$ npm install -g cordova
+```
+```
+$ npm install -g ionic
 ```
 
-And repeat
+You can use [Sublime Text 3](https://www.sublimetext.com/3) as IDE with some plugins listed here:
+* AngularJS
+* TypeScript
+* Git
+* HTML5
+
+You can also install TypeScript
 
 ```
-until finished
+$ npm install -g typescript
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+With Ionic and Cordova installed you have to clone the proyect into the desired folder and test it in the browser via shell
 
 ```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
+cd MedialabApp
+$ ionic serve
 ```
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+You can deploy the app on your Android phone installing the Android SDK,  Android SDK Plataform-tools (Android Debug Bridge) that can be downloaded via SDK Manager or Android Studio and the ADB/USB drivers from your Android Mobile phone provider website.
+Your device has to have the Developer Settings enabled and USB Debugging option enabled.
+Once installed you can deploy the app via shell
+
+```
+$ ionic run android --device
+```
+You can check first that Windows recognize your phone with the command
+
+```
+$ adb devices
+```
 
 ## Built With
 
 * [Ionic 2](http://ionicframework.com/docs/) - The framework used
 * [js-xlsx](https://github.com/SheetJS/js-xlsx) - Parser and writer for various spreadsheet formats
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
@@ -84,6 +79,7 @@ This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see th
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* [Josh Morony html5 mobile tutorials](https://www.joshmorony.com/)
+* [Thepolyglotdeveloper website](https://www.thepolyglotdeveloper.com/2016/06/working-shared-providers-ionic-2-mobile-app/)
+* [Exploringjs website for info about js Promises and asynchronous programming](http://exploringjs.com/es6/ch_promises.html)
+* [Ionic 2 forum](https://forum.ionicframework.com/?utm_source=framework&utm_medium=navbar&utm_campaign=forum%20CTA)

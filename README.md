@@ -44,6 +44,16 @@ cd MedialabApp
 $ ionic serve
 ```
 
+If you`re getting errors you can create a blank ionic proyect 
+
+```
+ionic start MedialabAPP blank --v2
+```
+Overwrite the src folder with our repository src folder and include xlsx and jzip folders in node modules from our repository node modules folder
+```
+cd MedialabApp
+$ ionic serve
+```
 ## Deployment
 
 You can deploy the app on your Android phone installing the Android SDK,  Android SDK Plataform-tools (Android Debug Bridge) that can be downloaded via SDK Manager or Android Studio and the ADB/USB drivers from your Android Mobile phone provider website.

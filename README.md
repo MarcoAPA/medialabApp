@@ -44,7 +44,7 @@ cd MedialabApp
 $ ionic serve
 ```
 
-If you`re getting errors you can create a blank ionic proyect 
+If you`re getting errors you can create a blank Ionic 2 proyect 
 
 ```
 ionic start MedialabAPP blank --v2

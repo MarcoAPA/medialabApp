@@ -14,7 +14,7 @@ You need to have node.js installed. You can download node.js from [here](https:/
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+A step by step series of examples that tell you how to get a development env running
 
 First you need to Install ionic 2 and Cordova vian npm
 

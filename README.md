@@ -1,6 +1,6 @@
 # Medialab APP
 
-The objetive of this work is the realization of a movile application where users can view Medialab-Prado upcoming events and filter them by date, type and price. We also provide the location of Medialab-Prado and how to get there from the device current position on walk, by car and by public transport. 
+The objetive of this work is the realization of a mobile application where users can view Medialab-Prado upcoming events and filter them by date, type and price. We also provide the location of Medialab-Prado and how to get there from the device current position on walk, by car and by public transport. 
 
 El objetivo de este trabajo es la realización de una aplicación móvil donde el usuario pueda visionar los eventos próximos del Medialab-Prado (hasta 90 días) con la posibilidad de filtrarlos por fecha, tipo y precio. Mostraremos también la ubicación del centro y como llegar hasta él desde la posición donde se encuentre el dispositivo móvil.
 

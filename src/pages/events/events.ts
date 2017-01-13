@@ -23,8 +23,10 @@ import { Database } from "../../providers/database";
 
 export class Events {
 
+    //Mirar si los loading se hacen cuando deben
     ionViewDidEnter(){
 
+        //Se podría mejorar para que espere a que cargue la base de datos sin tener que hacer dos load
         this.load().then((result) => {
                    
             if (result = []){

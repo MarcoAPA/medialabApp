@@ -325,7 +325,7 @@ export class Database {
      */
     public getAll() {
         return new Promise((resolve, reject) => {
-            this.storage.executeSql("SELECT * FROM events", []).then((data) => {
+            this.storage.executeSql("SELECT * FROM events ORDER BY d", []).then((data) => {
                 let events = [];
                 if(data.rows.length > 0) {
                     for(let i = 0; i < data.rows.length; i++) {

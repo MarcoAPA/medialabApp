@@ -4,6 +4,10 @@
         "source": "C:\\Users\\marco.a.palacios\\Documents\\Ricoh Workspace\\medialabAPP2\\platforms\\android\\res\\xml\\config.xml"
     },
     {
+        "merged": "C:\\Users\\Henar\\Documents\\GitHub\\medialabApp\\platforms\\android\\build\\intermediates\\res\\merged\\debug\\xml\\config.xml",
+        "source": "C:\\Users\\Henar\\Documents\\GitHub\\medialabApp\\platforms\\android\\res\\xml\\config.xml"
+    },
+    {
         "merged": "C:\\Users\\marco.a.palacios\\Documents\\Ricoh Workspace\\medialabAPP\\platforms\\android\\build\\intermediates\\res\\merged\\debug\\xml\\config.xml",
         "source": "C:\\Users\\marco.a.palacios\\Documents\\Ricoh Workspace\\medialabAPP\\platforms\\android\\res\\xml\\config.xml"
     }

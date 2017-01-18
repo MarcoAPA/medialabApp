@@ -5,35 +5,25 @@
     </button>
     <ion-title>MediaLab-Prado</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only clear>
-        <ion-icon name='search'></ion-icon>
-      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <h3>Próximos eventos</h3>
+  <ion-searchbar (ionInput)="searchEvents($event)"></ion-searchbar>
   
-  <ion-buttons start>
-    <button ion-button (click)="createEvent('Marco', 'Palacios')">
-      <ion-icon name="add"></ion-icon>
-    </button>
-    <button ion-button (click)="deleteEvent()">
-      <ion-icon name="remove"></ion-icon>
-    </button>
-  </ion-buttons>
 
   <ion-list>
-    <ion-card *ngFor="let event of itemList">
+     <ion-card *ngFor="let event of itemList" (click)="goToDetails(event)" >
         <ion-card-header>
           {{event.title}}
         </ion-card-header>
         <ion-card-content>
-          {{event.description}} 
-          {{event.place}}
+          <p  style="text-overflow: ellipsis;height:30%" >{{event.description}} </p>
+          <ion-icon name="pin" item-left> {{event.place}} </ion-icon>
           {{event.pagurl}}
-          {{event.d}}
+          <ion-icon name="calendar" item-left> {{event.d}} </ion-icon>
           {{event.etype}}
         </ion-card-content>  
     </ion-card>

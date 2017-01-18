@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 import { NavController, LoadingController } from 'ionic-angular';
-
-import { Database } from "../../providers/database"; 
+import { Database } from "../../providers/database";
+import { DetailsPage } from '../details/details';
 
 
 @Component({
@@ -23,6 +23,7 @@ import { Database } from "../../providers/database";
 
 export class Events {
 
+    itemListRetreived: any[];
     //Mirar si los loading se hacen cuando deben
     ionViewDidEnter(){
 
@@ -66,6 +67,7 @@ export class Events {
         return new Promise((resolve, reject) => {
             this.database.getAll().then((result) => {
                this.itemList = <Array<Object>> result;
+               this.itemListRetreived = this.itemList;
                resolve(result);
             }, (error) => {
                 alert("ERROR load :" +  JSON.stringify(error));
@@ -91,6 +93,21 @@ export class Events {
             alert("ERROR deleteEvent");
             console.log("ERROR: ", error);
         });
+    }
+
+
+    goToDetails(event) {
+        this.navController.push(DetailsPage, {event: event});
+    }
+
+    searchEvents(event: any){
+        this.itemList = this.itemListRetreived;
+        let searchValue = event.target.value;
+        if(searchValue && searchValue.trim() !== '') {
+            this.itemList = this.itemList.filter((item:{ title: String, description: String}) => {
+                return (item.title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1 || item.description.toLowerCase().indexOf(searchValue.toLowerCase()) > -1);
+            })
+        }
     }
 
 }

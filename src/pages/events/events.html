@@ -1,30 +1,48 @@
-<ion-header>
-  <ion-navbar>
+<ion-header >
+  <ion-navbar color="mediaLab">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>MediaLab-Prado</ion-title>
     <ion-buttons end>
     </ion-buttons>
+     <ion-searchbar (ionInput)="searchEvents($event)"></ion-searchbar>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <h3>Próximos eventos</h3>
-  <ion-searchbar (ionInput)="searchEvents($event)"></ion-searchbar>
+ 
   
 
   <ion-list>
-     <ion-card *ngFor="let event of itemList" (click)="goToDetails(event)" >
+     <ion-card id="itemList" *ngFor="let event of itemList" (click)="goToDetails(event)" >
         <ion-card-header>
-          {{event.title}}
+        <h1>  {{event.title}}</h1>
         </ion-card-header>
-        <ion-card-content>
-          <p  style="text-overflow: ellipsis;height:30%" >{{event.description}} </p>
-          <ion-icon name="pin" item-left> {{event.place}} </ion-icon>
-          {{event.pagurl}}
-          <ion-icon name="calendar" item-left> {{event.d}} </ion-icon>
-          {{event.etype}}
+        <ion-card-content >
+        <ion-grid >
+        <ion-row >
+
+        <ion-col width-50 >
+           <ion-icon *ngIf="event.place"  color="mediaLab" name="pin" left> {{event.place}}</ion-icon>
+         
+        </ion-col>
+        <ion-col width-50>
+          <ion-icon name="calendar" right color="mediaLab"> {{event.d}} </ion-icon>
+        </ion-col>
+        </ion-row>
+
+        </ion-grid>
+         <!-- <p>{{event.description}} </p> -->
+       
+         
+      
+         <!-- <p><a href="{{event.pagurl}}">Ir a la web</a></p>-->
+       
+          
+
+         <!-- {{event.etype}}-->
         </ion-card-content>  
     </ion-card>
   </ion-list>  

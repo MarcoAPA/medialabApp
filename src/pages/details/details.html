@@ -1,14 +1,31 @@
 <ion-header>
-	<ion-navbar>
+	<ion-navbar color="mediaLab">
 	    <ion-title>
 	    	{{ event.title }}
 	    </ion-title>
 	 </ion-navbar>
 </ion-header>
 <ion-content>
-		{{event.description }}
-        {{event.place}}
-        {{event.pagurl}}
-        {{event.d}}
-        {{event.etype}}
+	<ion-grid >
+		<ion-row>
+			<ion-col width-100>
+			{{event.description }}
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col width-50>
+	          <ion-icon name="calendar" right color="mediaLab"> {{event.d}} </ion-icon>
+	        </ion-col>
+	       
+		</ion-row>
+		<ion-row>
+		 <ion-col width-50 >
+	           <ion-icon *ngIf="event.place"  color="mediaLab" name="pin" left> {{event.place}}</ion-icon>
+	        </ion-col>
+			<ion-col width-50 >
+				<a href="{{event.pagurl}}">Ir a la web</a>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+	
 </ion-content>

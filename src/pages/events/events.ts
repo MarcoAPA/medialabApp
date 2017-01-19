@@ -35,7 +35,7 @@ export class Events {
             } 
    
         }, (error) => {
-            alert("ERROR load :" +  JSON.stringify(error));
+            //alert("ERROR load :" +  JSON.stringify(error));
             console.log("ERROR: ", error);
         });
 
@@ -70,7 +70,7 @@ export class Events {
                this.itemListRetreived = this.itemList;
                resolve(result);
             }, (error) => {
-                alert("ERROR load :" +  JSON.stringify(error));
+             //   alert("ERROR load :" +  JSON.stringify(error));
                 console.log("ERROR: ", error);
                 reject(error);
             });
@@ -90,7 +90,7 @@ export class Events {
         this.database.delete().then((result) => {
             this.load();
         }, (error) => {
-            alert("ERROR deleteEvent");
+           // alert("ERROR deleteEvent");
             console.log("ERROR: ", error);
         });
     }

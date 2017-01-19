@@ -11,23 +11,17 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Próximos eventos</h3>
+  <h3 color="mediaLab" text-center>Próximos eventos</h3>
  
   
 
   <ion-list>
      <ion-card id="itemList" *ngFor="let event of itemList" (click)="goToDetails(event)" >
-        <ion-card-header>
-        <h1>  {{event.title}}</h1>
+        <ion-card-header text-wrap>{{event.title}}
         </ion-card-header>
         <ion-card-content >
         <ion-grid >
         <ion-row >
-
-        <ion-col width-50 >
-           <ion-icon *ngIf="event.place"  color="mediaLab" name="pin" left> {{event.place}}</ion-icon>
-         
-        </ion-col>
         <ion-col width-50>
           <ion-icon *ngIf="event.d"  name="calendar" right color="mediaLab"> {{event.d}} </ion-icon>
         </ion-col>

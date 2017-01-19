@@ -50,28 +50,28 @@ export class Database {
                 this.dropE().then((result) => {
                     //alert("events borrada");   
                 }, (error) => {
-                    alert("ERROR: " +  JSON.stringify(error));
+                  //  alert("ERROR: " +  JSON.stringify(error));
                     console.log("ERROR: ", error);
                 });
 
                 this.dropAPPI().then((result) => {
                     //alert("appinfo borrada");   
                 }, (error) => {
-                    alert("ERROR:" +  JSON.stringify(error));
+                   // alert("ERROR:" +  JSON.stringify(error));
                     console.log("ERROR: ", error);
                 });
 
                 this.createEventTable().then((result) => {
                     //alert("events creada bd events");   
                 }, (error) => {
-                    alert("ERROR: " +  JSON.stringify(error));
+                   // alert("ERROR: " +  JSON.stringify(error));
                     console.log("ERROR: ", error);
                 });
 
                 this.createAppInfoTable().then((result) => {
                     //alert("events creada bd appinfo");    
                 }, (error) => {
-                    alert("ERROR: " +  JSON.stringify(error));
+                  //  alert("ERROR: " +  JSON.stringify(error));
                     console.log("ERROR: ", error);
                 });
 
@@ -207,7 +207,7 @@ export class Database {
     Función que carga el xls de la url, lo parsea e inserta los datos en la base de datos
      */
     public getXLSRequest(){
-      alert("Accedo a getxlsxrequest");
+    // alert("Accedo a getxlsxrequest");
       var url = 'http://datos.madrid.es/egob/catalogo/209505-0-medialab-eventos.xls';
       var oReq = new XMLHttpRequest();
       var workbook: any;
@@ -249,19 +249,19 @@ export class Database {
                 this.insert(title, description, place, pagurl, ' ', d ).then((result) => {
                 }, (error) => {
                     console.log("Error al insertar del getXLSRequest: ", error);
-                    alert("Error al insertar del getXLSRequest: " + JSON.stringify(error));
+                   // alert("Error al insertar del getXLSRequest: " + JSON.stringify(error));
                 });
               } else if ( currentDate.year == year && currentDate.month < month){
                   this.insert(title, description, place, pagurl, ' ', d ).then((result) => {
                   }, (error) => {
                       console.log("Error al insertar del getXLSRequest: ", error);
-                      alert("Error al insertar del getXLSRequest: " + JSON.stringify(error));
+                     // alert("Error al insertar del getXLSRequest: " + JSON.stringify(error));
                   });
               } else if ( currentDate.year == year && currentDate.month == month && currentDate.day <= day ){
                   this.insert(title, description, place, pagurl, ' ', d ).then((result) => {
                   }, (error) => {
                       console.log("Error al insertar del getXLSRequest: ", error);
-                      alert("Error al insertar del getXLSRequest: " + JSON.stringify(error));
+                     // alert("Error al insertar del getXLSRequest: " + JSON.stringify(error));
                   });
               }
           }
@@ -277,7 +277,7 @@ export class Database {
           this.storage.executeSql("INSERT INTO appinfo (year, month, day) VALUES (?, ?, ?)", [y, m, d]).then((data) => {
               resolve(data);
           }, (error) => {
-              alert('Fallo al insertar :' + JSON.stringify(error));
+             // alert('Fallo al insertar :' + JSON.stringify(error));
               console.error('Unable to insert in the database: ', error);
               reject(error);
           });
@@ -295,10 +295,10 @@ export class Database {
                 month: data.rows.item(0).month,
                 day: data.rows.item(0).day
               };
-              alert("lastupdate: " + JSON.stringify(lup));
+             // alert("lastupdate: " + JSON.stringify(lup));
               resolve(lup);
           }, (error) => {
-              alert('Fallo al obtener info :' + JSON.stringify(error));
+            //  alert('Fallo al obtener info :' + JSON.stringify(error));
               console.error('Unable to obtain info from the database: ', error);
               reject(error);
           });
@@ -313,7 +313,7 @@ export class Database {
             this.storage.executeSql("INSERT INTO events (title, description, place, pagurl, etype, d) VALUES (?, ?, ?, ?, ?, ?)", [title, description, place, pageurl, etype, d]).then((data) => {
                 resolve(data);
             }, (error) => {
-                alert('Fallo al insertar :' + JSON.stringify(error));
+              //  alert('Fallo al insertar :' + JSON.stringify(error));
                 console.error('Unable to insert into the database: ', error);
                 reject(error);
             });
@@ -355,7 +355,7 @@ export class Database {
             this.storage.executeSql("DELETE FROM events", []).then((data) => {
                 resolve(data);
             }, (error) => {
-                alert("Fallo al borrar :" + JSON.stringify(error));
+              //  alert("Fallo al borrar :" + JSON.stringify(error));
                 console.error('Unable to delete from the database: ', error);
                 reject(error);
             });

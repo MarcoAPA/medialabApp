@@ -22,7 +22,7 @@ export class Maps {
 
   private map: any;
   private mapInitialised: boolean = false;
-  private apiKey: 'AIzaSyBlrDUzc42lKRhjbVc_zD0sM1sJgyLEqjE'; /* API key de Google Maps*/
+  private apiKey: 'AIzaSyCX9_fKq1VyiTKSoxxBfCFqeuwawHkaehw'; /* API key de Google Maps*/
   private loading;
   private TransportMode: any = this;
 

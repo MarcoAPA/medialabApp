@@ -9,20 +9,23 @@
 	<ion-grid >
 		<ion-row>
 			<ion-col width-100 text-justify>
-			{{event.description }}
+			<p>{{event.description }}</p>
 			</ion-col>
 		</ion-row>
 		<ion-row>
-			<ion-col width-50>
+			<ion-col width-100>
 	          <ion-icon *ngIf="event.d"   name="calendar" right color="mediaLab"> {{event.d}} </ion-icon>
 	        </ion-col>
 	       
 		</ion-row>
 		<ion-row>
-		 <ion-col width-50 >
+		 <ion-col width-100 >
 	           <ion-icon *ngIf="event.place"  color="mediaLab" name="pin" left> {{event.place}}</ion-icon>
 	        </ion-col>
-			<ion-col width-50 *ngIf="event.pagurl">
+
+		</ion-row>
+		<ion-row>
+					<ion-col width-50 *ngIf="event.pagurl">
 				<a  href="{{event.pagurl}}">Ir a la web</a>
 			</ion-col>
 		</ion-row>

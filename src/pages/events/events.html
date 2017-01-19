@@ -29,7 +29,7 @@
          
         </ion-col>
         <ion-col width-50>
-          <ion-icon name="calendar" right color="mediaLab"> {{event.d}} </ion-icon>
+          <ion-icon *ngIf="event.d"  name="calendar" right color="mediaLab"> {{event.d}} </ion-icon>
         </ion-col>
         </ion-row>
 

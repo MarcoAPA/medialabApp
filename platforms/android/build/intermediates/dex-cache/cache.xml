@@ -3,30 +3,21 @@
 
     <item
         is-multidex="false"
+        jar="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\release\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2df8261f61b696b80468d90f4665f0d83b90112e">
+        <dex dex="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\build\intermediates\pre-dexed\release\CordovaLib-unspecified-release_9892d2a1de304a017d86efeb0e25ea89c820949e.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\libs\sqlite-connector.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.1"
         sha1="76169ab23a4f939925491c6fe186749da5a56ee9">
         <dex dex="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP\platforms\android\build\intermediates\pre-dexed\debug\sqlite-connector_6c8b4fa7e41a84c6c5a13fe03b1ee60327659eea.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP2\platforms\android\libs\sqlite-connector.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="76169ab23a4f939925491c6fe186749da5a56ee9">
-        <dex dex="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP2\platforms\android\build\intermediates\pre-dexed\debug\sqlite-connector_ab4bee7114ae49c075ae5ca83c80b8ac02532b82.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP2\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="79d68b70e2f02123c5a1205261f8c9cc038870de">
-        <dex dex="C:\Users\marco.a.palacios\Documents\Ricoh Workspace\medialabAPP2\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_e827be8997f9bad936b1c1e0838b2a78a3def6a7.jar" />
     </item>
     <item
         is-multidex="false"

@@ -17,7 +17,7 @@ import { About } from '../pages/about/about';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = Events;
+  rootPage: any ;
   activePage: any;
 
   pages: Array<{title: string, component: any}>;
@@ -40,9 +40,18 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
       StatusBar.styleDefault();
       Splashscreen.hide();
-    });
+      //Synchronous chain of asynchronous methods
+      this.database.openDatabase().then(() =>
+      this.database.createTables()).then(() =>
+      this.database.checkEventsState()).then((result) => 
+      this.database.updateEvents(result)).then((result) => {
+        //alert('Acabado updateEvents: '+ JSON.stringify(result));
+        this.rootPage = Events;
+      })
+    })
   }
 
   openPage(page) {

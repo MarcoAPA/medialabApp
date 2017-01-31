@@ -14,18 +14,9 @@
 
 <ion-content padding>
   <h3>Próximos eventos</h3>
-  
-  <ion-buttons start>
-    <button ion-button (click)="createEvent('Marco', 'Palacios')">
-      <ion-icon name="add"></ion-icon>
-    </button>
-    <button ion-button (click)="deleteEvent()">
-      <ion-icon name="remove"></ion-icon>
-    </button>
-  </ion-buttons>
 
   <ion-list>
-    <ion-card *ngFor="let event of itemList">
+    <ion-card *ngFor="let event of eventList">
         <ion-card-header>
           {{event.title}}
         </ion-card-header>

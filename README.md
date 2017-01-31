@@ -93,3 +93,4 @@ This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see th
 * [Thepolyglotdeveloper website](https://www.thepolyglotdeveloper.com/2016/06/working-shared-providers-ionic-2-mobile-app/)
 * [Exploringjs website for info about js Promises and asynchronous programming](http://exploringjs.com/es6/ch_promises.html)
 * [Ionic 2 forum](https://forum.ionicframework.com/?utm_source=framework&utm_medium=navbar&utm_campaign=forum%20CTA)
+* [Niolás Molina DB example](https://www.ion-book.com/blog/ionic2/sqlite-and-ionic-2/)

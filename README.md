@@ -72,6 +72,7 @@ $ adb devices
 ## Built With
 
 * [Ionic 2](http://ionicframework.com/docs/) - The framework used
+* [Typescript](https://www.typescriptlang.org/) - Typed superset of JavaScript that compiles to plain JavaScript.
 * [js-xlsx](https://github.com/SheetJS/js-xlsx) - Parser and writer for various spreadsheet formats
 
 ## Authors
